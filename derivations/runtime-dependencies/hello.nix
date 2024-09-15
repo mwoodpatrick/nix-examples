@@ -7,6 +7,14 @@
 #   result/bin/hello
 #   nix-store -q --references result
 #   ldd result/bin/hello
+#
+# To delete the build result do:
+#
+#   ls -l result
+#   nix-store --delete /nix/store/w12vjrbwh8wxzmwh49pam082pmxchw41-hello
+#   nix-collect-garbage
+#
+# see: [How to undo nix-build](https://discourse.nixos.org/t/how-to-undo-nix-build/5433)
 let
   pkgs = import <nixpkgs> { };
   mkDerivation = import ./autotools.nix pkgs;
