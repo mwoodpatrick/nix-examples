@@ -9,8 +9,10 @@ derivation {
   name = "simple";
   builder = "${pkgs.bash}/bin/bash";
   args = [ ./simple_builder.sh ];
-  gcc = pkgs.gcc;
-  coreutils = pkgs.coreutils;
+  # gcc = pkgs.gcc;
+  # coreutils = pkgs.coreutils;
+  # short form of above two lines
+  inherit (pkgs) gcc coreutils;
   src = ./simple.c;
   system = builtins.currentSystem;
 }
