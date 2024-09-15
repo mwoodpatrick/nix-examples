@@ -1,8 +1,9 @@
 # [Nix Pills](https://nixos.org/guides/nix-pills/00-preface)
 
-rec {
+let
+  pkgs = import <nixpkgs> { };
+in rec {
 # Nix expressions
-
 
 a = 3;
 b = 4;
@@ -48,4 +49,9 @@ ires = imul a b;
 # imprt function and provide args
 
 ifnc = import ./test.nix { a = 5; trueMsg = "ok"; };
+
+# gcc = pkgs.gcc;
+# coreutils = pkgs.coreutils;
+# short form of above two lines
+inherit (pkgs) gcc coreutils;
 }
