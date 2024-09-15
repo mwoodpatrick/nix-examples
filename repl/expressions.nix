@@ -44,4 +44,8 @@ ia = import ./a.nix;
 ib = import ./b.nix;
 imul = import ./mul.nix;
 ires = imul a b;
+
+# imprt function and provide args
+
+ifnc = import ./test.nix { a = 5; trueMsg = "ok"; };
 }
