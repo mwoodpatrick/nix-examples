@@ -40,6 +40,13 @@
 #       libc.so.6 => /nix/store/r8qsxm85rlxzdac7988psm7gimg4dl3q-glibc-2.39-52/lib/libc.so.6 (0x00007fe0c6431000)
 #       /nix/store/r8qsxm85rlxzdac7988psm7gimg4dl3q-glibc-2.39-52/lib/ld-linux-x86-64.so.2 => /nix/store/r8qsxm85rlxzdac7988psm7gimg4dl3q-glibc-2.39-52/lib64/ld-linux-x86-64.so.2 (0x00007fe0c6620000)
 #
+# THe runtime dependencies for each executable and shared library are specified in the [rpath](https://en.wikipedia.org/wiki/Rpath].
+# Nix provides a tool called [patchelf](https://github.com/NixOS/patchelf], which reduces the rpath 
+# to the paths that are actually used by the binary.
+#
+#	find $out -type f -exec patchelf --shrink-rpath '{}' \; -exec strip '{}' \; 2>/dev/null
+#
+#
 # To delete the build result do:
 #
 #   ls -l result
