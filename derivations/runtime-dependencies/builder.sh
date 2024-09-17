@@ -16,3 +16,6 @@ done
 ./configure --prefix=$out
 make
 make install
+echo find $out -type f -exec patchelf --shrink-rpath '{}' \; -exec strip '{}'
+find $out -type f -exec patchelf --shrink-rpath '{}' \; -exec strip '{}' \; 2>/dev/null
+echo "all done status=$?!"
