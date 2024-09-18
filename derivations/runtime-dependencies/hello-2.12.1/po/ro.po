@@ -1,0 +1,381 @@
+# Mesajele în limba română pentru pachetul hello.
+# Copyright (C) 2003 Free Software Foundation, Inc.
+# This file is distributed under the same license as the hello package.
+#
+# Eugen Hoanca <eugenh@urban-grafx.ro>, 2003.
+# Florentina Mușat <florentina.musat.28@gmail.com>, 2020.
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2022.
+#
+# Cronologia traducerii fișierului „hello”:
+# Traducerea inițială, făcută de EH, pentru versiunea hello 2.1.1.
+# Actualizare a traducerii pentru versiunea hello 2.10, făcută de FM.
+# Actualizare a mesajelor, de la fișierul „hello-2.10.pot”.
+# Actualizare a algoritmului formelor de plural (de la „null” la „trei”).
+# NU și a mesajelor traduse (acestea au rămas neschimbate).
+# Eliminare a mesajelor ce-au dispărut în ultima versiune.
+# Actualizări realizate de Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 15.01.2022.
+# Actualizare a traducerii pentru versiunea 2.12, făcută de R-GC.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hello 2.12\n"
+"Report-Msgid-Bugs-To: bug-hello@gnu.org\n"
+"POT-Creation-Date: 2022-05-29 23:57+0100\n"
+"PO-Revision-Date: 2022-05-23 18:52+0200\n"
+"Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
+"Language-Team: Romanian <translation-team-ro@lists.sourceforge.net>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2);\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. This is a proper name. See the gettext manual, section Names.
+#: src/hello.c:41
+msgid "Karl Berry"
+msgstr "Karl Berry"
+
+#. This is a proper name. See the gettext manual, section Names.
+#: src/hello.c:42
+msgid "Sami Kerola"
+msgstr "Sami Kerola"
+
+#. This is a proper name. See the gettext manual, section Names.
+#: src/hello.c:43
+msgid "Jim Meyering"
+msgstr "Jim Meyering"
+
+#. This is a proper name. See the gettext manual, section Names.
+#: src/hello.c:44
+msgid "Reuben Thomas"
+msgstr "Reuben Thomas"
+
+#. TRANSLATORS: --help output 1 (synopsis)
+#. no-wrap
+#: src/hello.c:55
+#, c-format
+msgid "Usage: %s [OPTION]...\n"
+msgstr "Utilizare: %s [OPȚIUNE]...\n"
+
+#. TRANSLATORS: --help output 2 (brief description)
+#. no-wrap
+#: src/hello.c:58
+msgid "Print a friendly, customizable greeting.\n"
+msgstr "Tipărește un salut personalizabil, prietenos.\n"
+
+#. TRANSLATORS: --help output 3: options
+#. no-wrap
+#: src/hello.c:62
+msgid "  -t, --traditional       use traditional greeting\n"
+msgstr "  -t, --traditional       utilizează salutul tradițional\n"
+
+#: src/hello.c:63
+msgid "  -g, --greeting=TEXT     use TEXT as the greeting message\n"
+msgstr "  -g, --greeting=TEXT     utilizează TEXT ca mesaj de salut\n"
+
+#: src/hello.c:65
+msgid "      --help     display this help and exit\n"
+msgstr "      --help     afișează acest mesaj de ajutor și iese\n"
+
+#: src/hello.c:66
+msgid "      --version  output version information and exit\n"
+msgstr "      --version  afișează informațiile despre versiune și iese\n"
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language code
+#. <https://translationproject.org/team/LANG_CODE.html> to form one of
+#. the URLs at https://translationproject.org/team/.  Otherwise, replace
+#. the entire URL with your translation team's email address.
+#: src/hello.c:76
+#, c-format
+msgid "Report %s translation bugs to <https://translationproject.org/team/>\n"
+msgstr ""
+"Raportați greșelile de traducere din %s la <translation-team-ro@lists."
+"sourceforge.net>\n"
+
+#: src/hello.c:112
+msgid "hello, world"
+msgstr "salut, lume"
+
+#: src/hello.c:123
+msgid "extra operand"
+msgstr "operand extra"
+
+#: src/hello.c:149
+msgid "Hello, world!"
+msgstr "Salut, lume!"
+
+#: src/hello.c:163
+#, c-format
+msgid "conversion to a multibyte string failed"
+msgstr "conversia unui șir de multiocteți a eșuat"
+
+#: src/system.h:57
+#, c-format
+msgid "Try '%s --help' for more information.\n"
+msgstr "Încercați «%s --help» pentru mai multe informații.\n"
+
+#: lib/error.c:195
+msgid "Unknown system error"
+msgstr "Eroare de sistem necunoscută"
+
+#: lib/getopt.c:278
+#, c-format
+msgid "%s: option '%s%s' is ambiguous\n"
+msgstr "%s: opțiunea „%s%s” este ambiguă\n"
+
+#: lib/getopt.c:284
+#, c-format
+msgid "%s: option '%s%s' is ambiguous; possibilities:"
+msgstr "%s: opțiunea „%s%s” este ambiguă; posibilități:"
+
+#: lib/getopt.c:319
+#, c-format
+msgid "%s: unrecognized option '%s%s'\n"
+msgstr "%s: opțiunea nerecunoscută „%s%s”\n"
+
+#: lib/getopt.c:345
+#, c-format
+msgid "%s: option '%s%s' doesn't allow an argument\n"
+msgstr "%s: opțiunea „%s%s” nu permite un argument\n"
+
+#: lib/getopt.c:360
+#, c-format
+msgid "%s: option '%s%s' requires an argument\n"
+msgstr "%s: opțiunea „%s%s” necesită un argument\n"
+
+#: lib/getopt.c:621
+#, c-format
+msgid "%s: invalid option -- '%c'\n"
+msgstr "%s: opțiune nevalidă -- „%c”\n"
+
+#: lib/getopt.c:636 lib/getopt.c:682
+#, c-format
+msgid "%s: option requires an argument -- '%c'\n"
+msgstr "%s: opțiunea necesită un argument -- „%c”\n"
+
+#: lib/closeout.c:122
+msgid "write error"
+msgstr "eroare de scriere"
+
+#. TRANSLATORS:
+#. Get translations for open and closing quotation marks.
+#. The message catalog should translate "`" to a left
+#. quotation mark suitable for the locale, and similarly for
+#. "'".  For example, a French Unicode local should translate
+#. these to U+00AB (LEFT-POINTING DOUBLE ANGLE
+#. QUOTATION MARK), and U+00BB (RIGHT-POINTING DOUBLE ANGLE
+#. QUOTATION MARK), respectively.
+#.
+#. If the catalog has no translation, we will try to
+#. use Unicode U+2018 (LEFT SINGLE QUOTATION MARK) and
+#. Unicode U+2019 (RIGHT SINGLE QUOTATION MARK).  If the
+#. current locale is not Unicode, locale_quoting_style
+#. will quote 'like this', and clocale_quoting_style will
+#. quote "like this".  You should always include translations
+#. for "`" and "'" even if U+2018 and U+2019 are appropriate
+#. for your locale.
+#.
+#. If you don't know what to put here, please see
+#. <https://en.wikipedia.org/wiki/Quotation_marks_in_other_languages>
+#. and use glyphs suitable for your language.
+#: lib/quotearg.c:355
+msgid "`"
+msgstr "„"
+
+#: lib/quotearg.c:356
+msgid "'"
+msgstr "”"
+
+#: lib/version-etc.c:73
+#, c-format
+msgid "Packaged by %s (%s)\n"
+msgstr "Împachetat de %s (%s)\n"
+
+#: lib/version-etc.c:76
+#, c-format
+msgid "Packaged by %s\n"
+msgstr "Împachetat de %s\n"
+
+#. TRANSLATORS: Translate "(C)" to the copyright symbol
+#. (C-in-a-circle), if this symbol is available in the user's
+#. locale.  Otherwise, do not translate "(C)"; leave it as-is.
+#: lib/version-etc.c:83
+msgid "(C)"
+msgstr "©"
+
+#. TRANSLATORS: The %s placeholder is the web address of the GPL license.
+#: lib/version-etc.c:88
+#, c-format
+msgid ""
+"License GPLv3+: GNU GPL version 3 or later <%s>.\n"
+"This is free software: you are free to change and redistribute it.\n"
+"There is NO WARRANTY, to the extent permitted by law.\n"
+msgstr ""
+"Licența GPLv3+: GNU GPL versiunea 3 sau ulterioară <%s>.\n"
+"Acesta este software liber: sunteți liber să îl modificați și să îl "
+"redistribuiți.\n"
+"NU există NICIO GARANȚIE, în măsura permisă de lege.\n"
+
+#. TRANSLATORS: %s denotes an author name.
+#: lib/version-etc.c:105
+#, c-format
+msgid "Written by %s.\n"
+msgstr "Scris de %s.\n"
+
+#. TRANSLATORS: Each %s denotes an author name.
+#: lib/version-etc.c:109
+#, c-format
+msgid "Written by %s and %s.\n"
+msgstr "Scris de %s și %s.\n"
+
+#. TRANSLATORS: Each %s denotes an author name.
+#: lib/version-etc.c:113
+#, c-format
+msgid "Written by %s, %s, and %s.\n"
+msgstr "Scris de %s, %s și %s.\n"
+
+#. TRANSLATORS: Each %s denotes an author name.
+#. You can use line breaks, estimating that each author name occupies
+#. ca. 16 screen columns and that a screen line has ca. 80 columns.
+#: lib/version-etc.c:120
+#, c-format
+msgid ""
+"Written by %s, %s, %s,\n"
+"and %s.\n"
+msgstr ""
+"Scris de %s, %s, %s\n"
+"și %s.\n"
+
+#. TRANSLATORS: Each %s denotes an author name.
+#. You can use line breaks, estimating that each author name occupies
+#. ca. 16 screen columns and that a screen line has ca. 80 columns.
+#: lib/version-etc.c:127
+#, c-format
+msgid ""
+"Written by %s, %s, %s,\n"
+"%s, and %s.\n"
+msgstr ""
+"Scris de %s, %s, %s,\n"
+"%s și %s.\n"
+
+#. TRANSLATORS: Each %s denotes an author name.
+#. You can use line breaks, estimating that each author name occupies
+#. ca. 16 screen columns and that a screen line has ca. 80 columns.
+#: lib/version-etc.c:134
+#, c-format
+msgid ""
+"Written by %s, %s, %s,\n"
+"%s, %s, and %s.\n"
+msgstr ""
+"Scris de %s, %s, %s,\n"
+"%s, %s și %s.\n"
+
+#. TRANSLATORS: Each %s denotes an author name.
+#. You can use line breaks, estimating that each author name occupies
+#. ca. 16 screen columns and that a screen line has ca. 80 columns.
+#: lib/version-etc.c:142
+#, c-format
+msgid ""
+"Written by %s, %s, %s,\n"
+"%s, %s, %s, and %s.\n"
+msgstr ""
+"Scris de %s, %s, %s,\n"
+"%s, %s, %s și %s.\n"
+
+#. TRANSLATORS: Each %s denotes an author name.
+#. You can use line breaks, estimating that each author name occupies
+#. ca. 16 screen columns and that a screen line has ca. 80 columns.
+#: lib/version-etc.c:150
+#, c-format
+msgid ""
+"Written by %s, %s, %s,\n"
+"%s, %s, %s, %s,\n"
+"and %s.\n"
+msgstr ""
+"Scris de %s, %s, %s,\n"
+"%s, %s, %s, %s\n"
+"și %s.\n"
+
+#. TRANSLATORS: Each %s denotes an author name.
+#. You can use line breaks, estimating that each author name occupies
+#. ca. 16 screen columns and that a screen line has ca. 80 columns.
+#: lib/version-etc.c:159
+#, c-format
+msgid ""
+"Written by %s, %s, %s,\n"
+"%s, %s, %s, %s,\n"
+"%s, and %s.\n"
+msgstr ""
+"Scris de %s, %s, %s,\n"
+"%s, %s, %s, %s,\n"
+"%s și %s.\n"
+
+#. TRANSLATORS: Each %s denotes an author name.
+#. You can use line breaks, estimating that each author name occupies
+#. ca. 16 screen columns and that a screen line has ca. 80 columns.
+#: lib/version-etc.c:170
+#, c-format
+msgid ""
+"Written by %s, %s, %s,\n"
+"%s, %s, %s, %s,\n"
+"%s, %s, and others.\n"
+msgstr ""
+"Scris de %s, %s, %s,\n"
+"%s, %s, %s, %s,\n"
+"%s, %s și alții.\n"
+
+#. TRANSLATORS: The placeholder indicates the bug-reporting address
+#. for this package.  Please add _another line_ saying
+#. "Report translation bugs to <...>\n" with the address for translation
+#. bugs (typically your translation team's web or email address).
+#: lib/version-etc.c:249
+#, c-format
+msgid "Report bugs to: %s\n"
+msgstr ""
+"Raportați erorile la: %s\n"
+"Raportați greșelile de traducere la:\n"
+"\n"
+
+#: lib/version-etc.c:251
+#, c-format
+msgid "Report %s bugs to: %s\n"
+msgstr "Raportați erorile din %s la: %s\n"
+
+#: lib/version-etc.c:255 lib/version-etc.c:257
+#, c-format
+msgid "%s home page: <%s>\n"
+msgstr "%s pagina principală: <%s>\n"
+
+#: lib/version-etc.c:260
+#, c-format
+msgid "General help using GNU software: <%s>\n"
+msgstr "Ajutor general pentru utilizarea software-ului GNU: <%s>\n"
+
+#: lib/xalloc-die.c:34
+msgid "memory exhausted"
+msgstr "memorie epuizată"
+
+#~ msgid ""
+#~ "  -h, --help          display this help and exit\n"
+#~ "  -v, --version       display version information and exit\n"
+#~ msgstr ""
+#~ "  -h, --help          afișează acest ajutor și ieși\n"
+#~ "  -v, --version       afișează informații de versiune și ieși\n"
+
+#~ msgid "%s home page: <http://www.gnu.org/software/%s/>\n"
+#~ msgstr "%s pagina principală <http://www.gnu.org/software/%s/>\n"
+
+#~ msgid "%s: option '--%s' doesn't allow an argument\n"
+#~ msgstr "%s: opțiunea „--%s” nu permite un argument\n"
+
+#~ msgid "%s: unrecognized option '--%s'\n"
+#~ msgstr "%s: opțiune nerecunoscută „--%s”\n"
+
+#~ msgid "%s: option '-W %s' doesn't allow an argument\n"
+#~ msgstr "%s: opțiunea „-W %s” nu permite un argument\n"
+
+#~ msgid "%s: option '-W %s' requires an argument\n"
+#~ msgstr "%s: opțiunea „-W %s” necesită un argument\n"
