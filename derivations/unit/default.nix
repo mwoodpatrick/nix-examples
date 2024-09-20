@@ -28,8 +28,8 @@ let
   php82-unit = php82.override phpConfig;
 
 in stdenv.mkDerivation rec {
-  version = "1.32.1";
-  pname = "unit";
+  version = "1.33.0";
+  pname = "myunit";
 
   src = fetchFromGitHub {
     owner = "nginx";
