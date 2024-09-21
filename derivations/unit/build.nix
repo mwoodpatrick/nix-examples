@@ -15,6 +15,7 @@ in
        perl538 = nixpkgs.pkgs.perl538;
        withRuby_3_1 = false; ruby_3_1 = nixpkgs.pkgs.ruby_3_1;
        withRuby_3_2 = true; ruby_3_2 = nixpkgs.pkgs.ruby_3_2;
+       openssl = nixpkgs.pkgs.openssl;
        }
 
 
