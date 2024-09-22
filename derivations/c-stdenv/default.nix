@@ -1,22 +1,47 @@
-# https://nix.dev/tutorials/working-with-local-files.html
-# https://ryantm.github.io/nixpkgs/functions/library/fileset/
+# [Working with local files](https://nix.dev/tutorials/working-with-local-files.html)
+# [Sandbox isolated environment](https://nix.dev/manual/nix/2.24/command-ref/conf-file.html#conf-sandbox)
+# [lib.fileset: file set functions](https://ryantm.github.io/nixpkgs/functions/library/fileset/)
+#
+# Create a derivation for build:
+#
+#   nix-instantiate default.nix
+#
+# View the generated derivation:
+#
+#   nix derivation show <derrivation>
+#
+# Build the package:
+#
+#   nix-build default.nix
+#
+# Add -v (possibly multiple times to increase verbosity)
+#
+# Display build log:
+#
+#   nix log <store path>
+#
+# Create a shell in the build environment for the package:
+#
+#   nix-shell default.nix
+
 let
     nixpkgs = import <nixpkgs> {};
     lib = nixpkgs.lib;
     fs = lib.fileset;
-    sourceFiles = ./hello.c;
-    # fs.trace sourceFiles;
+    debug = lib.debug;
+    # fs.trace "./." null
+    sourceFiles = fs.toSource {
+                root = ./.;
+                fileset = ./hello.c;
+      };
 
 	build = { stdenv, lib }:
-	stdenv.mkDerivation rec {
+    builtins.trace "Creating Hello" (fs.trace ./hello.c)
+	( stdenv.mkDerivation rec {
 	  pname = "hello";
 	  version = "1.0";
-	
-      src = fs.toSource {
-                root = ./.;
-                fileset = sourceFiles;
-      };
-	
+      src = sourceFiles;
+      enableDebugging = false; # prevent stripping of debug symbols
 	  buildInputs = [ stdenv.cc ];
 	
 	  buildPhase = ''
@@ -28,6 +53,6 @@ let
 	    mkdir -p $out/bin
 	    cp hello $out/bin/
 	  '';
-	};
+	});
 in
     build { stdenv = nixpkgs.pkgs.stdenv; lib=lib; }
