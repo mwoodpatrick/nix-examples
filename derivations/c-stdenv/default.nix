@@ -4,7 +4,7 @@
 #
 # Create a derivation for build:
 #
-#   nix-instantiate default.nix
+#   nix-instantiate
 #
 # View the generated derivation:
 #
@@ -12,7 +12,7 @@
 #
 # Build the package:
 #
-#   nix-build default.nix
+#   nix-build
 #
 # Add -v (possibly multiple times to increase verbosity)
 #
@@ -22,14 +22,13 @@
 #
 # Create a shell in the build environment for the package:
 #
-#   nix-shell default.nix
+#   nix-shell
 
 let
     nixpkgs = import <nixpkgs> {};
     lib = nixpkgs.lib;
     fs = lib.fileset;
     debug = lib.debug;
-    # fs.trace "./." null
     sourceFiles = fs.toSource {
                 root = ./.;
                 fileset = ./hello.c;
