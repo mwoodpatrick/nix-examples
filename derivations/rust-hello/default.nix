@@ -34,16 +34,18 @@ let
     lib = nixpkgs.lib;
     fs = lib.fileset;
     debug = lib.debug;
+    srcPath = ./rust-hello;
     sourceFiles = fs.toSource {
                 root = ./.;
-                fileset = ./rust-hello;
+                fileset = srcPath;
       };
       ts = builtins.typeOf(sourceFiles);
-in builtins.trace "Creating Hello ${sourceFiles} ${builtins.typeOf(sourceFiles)}" (fs.trace ./rust-hello)
+in builtins.trace "Creating Hello my source Files: ${sourceFiles} typeof source files: ${builtins.typeOf(sourceFiles)} type of srcPath: ${builtins.typeOf(srcPath)}" (fs.trace ./rust-hello)
 # in builtins.trace "Creating Hello ${ts} " (fs.trace ./rust-hello)
 nixpkgs.stdenv.mkDerivation {
+    pname = "hello-rust";
+    version = "1.1";
     src = sourceFiles;
-    name = "rust-hello-1.0";
     system = "x86_64-linux";
     nativeBuildInputs = [ nixpkgs.cargo ];
     buildPhase = ''
