@@ -1,0 +1,3 @@
+[submodule "flakes/templates"]
+	path = flakes/templates
+	url = https://github.com/NixOS/templates

@@ -1,3 +1,8 @@
+# [Official Nix templates](https://github.com/NixOS/templates)
+# nix flake show templates
+# nix flake init -t templates#bash-hello
+# git add flake.nix # required otherwise it will not build
+# nix build
 {
   description = "An over-engineered Hello World in bash";
 
