@@ -3,6 +3,11 @@
   # [Linux kernel](https://nixos.wiki/wiki/Linux_kernel)
   # boot.kernelPackages = pkgs.linuxPackages_5_15;
   boot.kernelPackages = pkgs.linuxPackages_6_11;
+
+  networking.hostName = "my-nixos-system";
+  networking.networkmanager.enable = true;
+ 
+  time.timeZone = "America/Los_Angeles";
   
   users.groups.admin = {};
   users.users = {
@@ -31,6 +36,9 @@
   networking.firewall.allowedTCPPorts = [ 22 ];
   environment.systemPackages = with pkgs; [
     htop
+    vim
+    git
+    wget
   ];
 
   system.stateVersion = "24.05";
