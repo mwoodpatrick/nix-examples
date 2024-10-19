@@ -1,8 +1,28 @@
 # [Setting up qemu VM using nix flakes](https://gist.github.com/FlakM/0535b8aa7efec56906c5ab5e32580adf)
 
+[Building a service as a VM (for testing)](https://nixos.wiki/wiki/Cheatsheet)
+
 [Linux kernel - nixos,wiki](https://nixos.wiki/wiki/Linux_kernel)
 
-nixos-rebuild build-vm --flake .#test
-result/bin/run-my-nixos-system-vm
+[Running NixOS Guests on QEMU](https://thenegation.com/posts/nixos-on-qemu/)
 
-ssh -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no admin@localhost -p 2221
+[WEMU Networking](https://wiki.qemu.org/Documentation/Networking)
+
+nixos-rebuild build-vm --flake .#test $ build the guest VM
+export QEMU_NET_OPTS="hostfwd=tcp::2221-:22" # enable port forwarding
+result/bin/run-my-nixos-system-vm # launch the VM
+
+ssh -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no admin@localhost -p 2221 # ssh into VM
+
+
+# QEMU_NET_OPTS
+
+QEMU_NET_OPTS is an environment variable used to configure network options for QEMU virtual machines. It allows you to specify various network settings, such as port forwarding, which can be useful for accessing services running on the virtual machine from the host system.
+
+Forward TCP traffic from port 2221 on the host to port 22 on the guest, allowing SSH access.
+
+1
+thenegation.com
+
+2
+wiki.qemu.org
