@@ -5,9 +5,28 @@
 # Then connect with ssh -p 2222 guest@localhost
 { inputs, lib, config, pkgs, ... }:
 {
+  # nix.nixPath = [ "nixpkgs=/home/matt/nixpkgs" "nixos-config=/etc/nixos/configuration.nix" "/nix/var/nix/profiles/per-user/root/channels" ];
+
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
   # Internationalisation options
   i18n.defaultLocale = "en_US.UTF-8";
   console.keyMap = "us";
+
+  # Select internationalisation properties.
+  # i18n = {
+  #   consoleFont = "Lat2-Terminus16";
+  #   consoleKeyMap = "us";
+  #   defaultLocale = "en_US.UTF-8";
+  # };
+
+  networking.hostName = "minimal"; # Define your hostname.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # Set your time zone.
+  time.timeZone = "America/Los_Angeles";
 
   # Options for the screen
   virtualisation.vmVariant = {
@@ -57,10 +76,11 @@
   # Enable ssh
   services.sshd.enable = true;
 
-  # Included packages here
+  # Included packages in system profile here
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
     dig
+    fzf
     git
     glances
     hey
@@ -69,6 +89,7 @@
     google-chrome
     neovim
     neofetch
+    tmux
     wget
     wrk
   ];
