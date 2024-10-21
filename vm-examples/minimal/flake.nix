@@ -1,4 +1,5 @@
 # [Modularize Your NixOS Configuration](https://nixos-and-flakes.thiscute.world/nixos-with-flakes/modularize-the-configuration)
+# [NixOS "Stoat" 23.05](https://www.youtube.com/watch?v=79-O7sQxHwk)
 # [NixOS/nixpkgs](https://github.com/NixOS/nixpkgs.git)
 # [mwoodpatrick/nixpkgs](https://github.com/mwoodpatrick/nixpkgs.git)
 # [nix-community/home-manager](https://github.com/nix-community/home-manager)

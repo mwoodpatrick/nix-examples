@@ -33,6 +33,10 @@
     home = "/home/guest";
     extraGroups = [ "wheel" ];
     initialPassword = "guest";
+    packages = with pkgs; [
+        firefox
+        # thunderbird
+        ];
   };
 
   security.sudo.wheelNeedsPassword = false;
