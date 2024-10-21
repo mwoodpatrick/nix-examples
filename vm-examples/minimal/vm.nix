@@ -57,10 +57,14 @@
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
     dig
+    git
+    glances
     hey
+    htop
     httpie
     google-chrome
     neovim
+    neofetch
     wget
     wrk
   ];
