@@ -8,6 +8,7 @@
 # [nix-community/home-manager](https://github.com/nix-community/home-manager)
 # [mwoodpatrick/home-manager](https://github.com/mwoodpatrick/home-manager)
 # build guest: nix build  ./#nixosConfigurations.vm.config.system.build.vm
+#              nix build ./#nixosConfigurations.my-machine.config.system.build.vm [Practical Nix flake anatomy: a guided tour of flake.nix#nixosConfigurations](https://vtimofeenko.com/posts/practical-nix-flake-anatomy-a-guided-tour-of-flake.nix/#nixosconfigurations)
 # run guest: result/bin/run-nixos-vm
 {
   description = "VM";
