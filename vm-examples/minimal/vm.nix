@@ -3,7 +3,7 @@
 # To be able to connect with ssh enable port forwarding with:
 # QEMU_NET_OPTS="hostfwd=tcp::2222-:22" ./result/bin/run-nixos-vm
 # Then connect with ssh -p 2222 guest@localhost
-{ inputs, lib, config, pkgs, ... }:
+{ inputs, lib, config, options, pkgs, ... }:
 {
   # You can import other NixOS modules here
   imports = [
@@ -105,10 +105,11 @@
     home = "/home/guest";
     extraGroups = [ "wheel" ];
     initialPassword = "guest";
-    packages = with pkgs; [
-        firefox
-        # thunderbird
-        ];
+    packages = [ inputs.home-manager.packages.${pkgs.system}.default ];
+    # packages = with pkgs; [
+    #   firefox
+    #   # thunderbird
+    #   ];
     openssh.authorizedKeys.keys = [
         # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
       ];

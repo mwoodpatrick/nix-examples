@@ -31,6 +31,15 @@
     {
       nixosConfigurations.vm = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+
+        # Set all inputs parameters as special arguments for all submodules,
+        # so you can directly use all dependencies in inputs in submodules
+        specialArgs = { inherit inputs; };
+
+        # This module works the same as the `specialArgs` parameter we used above
+        # choose one of the two methods to use
+        # { _module.args = { inherit inputs; };}
+
         modules = [ ./vm.nix ];
         # modules = [ ./nixos/configuration.nix ];
       };
