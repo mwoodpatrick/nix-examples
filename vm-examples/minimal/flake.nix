@@ -10,6 +10,9 @@
 # build guest: nix build  ./#nixosConfigurations.vm.config.system.build.vm
 #              nix build ./#nixosConfigurations.my-machine.config.system.build.vm [Practical Nix flake anatomy: a guided tour of flake.nix#nixosConfigurations](https://vtimofeenko.com/posts/practical-nix-flake-anatomy-a-guided-tour-of-flake.nix/#nixosconfigurations)
 # run guest: result/bin/run-nixos-vm
+# Edit this configuration file to define what should be installed on
+# your system. Help is available in the configuration.nix(5) man page, on
+# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 {
   description = "VM";
 
@@ -40,7 +43,7 @@
         # choose one of the two methods to use
         # { _module.args = { inherit inputs; };}
 
-        modules = [ ./vm.nix ];
+        modules = [ ./nixos/configuration.nix ];
         # modules = [ ./nixos/configuration.nix ];
       };
       inherit inputs;
