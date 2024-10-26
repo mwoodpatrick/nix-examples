@@ -7,7 +7,7 @@
     in
     {
       # test is a hostname for our machine
-      nixosConfigurations.test = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.westie-vm = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
           ./configuration.nix

@@ -4,7 +4,7 @@
   # boot.kernelPackages = pkgs.linuxPackages_5_15;
   boot.kernelPackages = pkgs.linuxPackages_6_11;
 
-  networking.hostName = "my-nixos-system";
+  networking.hostName = "westie";
   networking.networkmanager.enable = true;
  
   time.timeZone = "America/Los_Angeles";
