@@ -1,4 +1,8 @@
-{ config, lib, pkgs, ... }: {
+{ inputs, lib, config, options, pkgs, ... } : {
+
+  # requires --impure
+  # imports = [ <home-manager/nixos> ];
+
   users.groups.admin = {};
   users.users = {
     admin = {
@@ -13,7 +17,7 @@
       home = "/home/guest";
       extraGroups = [ "wheel" ];
       initialPassword = "westie";
-      # packages = [ inputs.home-manager.packages.${pkgs.system}.default ];
+      packages = [ inputs.home-manager.packages.${pkgs.system}.default ];
       # packages = with pkgs; [
       #   firefox
       #   # thunderbird
@@ -23,10 +27,11 @@
         ];
     };
 
-    alice = {
+    mwoodpatrick = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
       initialPassword = "westie";
+      packages = [ pkgs.cowsay ]; # echo "hello world" | cowsay
     };
 
     # security.sudo.wheelNeedsPassword = false;
