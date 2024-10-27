@@ -29,7 +29,7 @@
 
     mwoodpatrick = {
       isNormalUser = true;
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "libvirt" ];
       initialPassword = "westie";
       packages = [ pkgs.cowsay ]; # echo "hello world" | cowsay
     };
