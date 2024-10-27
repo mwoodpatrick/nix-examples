@@ -9,16 +9,6 @@
  
   time.timeZone = "America/Los_Angeles";
   
-  users.groups.admin = {};
-  users.users = {
-    admin = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" ];
-      password = "admin";
-      group = "admin";
-    };
-  };
-
   virtualisation.vmVariant = {
     # following configuration is added only when building VM with build-vm
     virtualisation = {
