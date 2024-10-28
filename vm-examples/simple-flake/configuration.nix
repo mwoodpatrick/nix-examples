@@ -1,8 +1,14 @@
 { config, lib, pkgs, ... }: {
-  # customize kernel version
+# customize kernel version
+  # [The Linux Kernel Archives](https://www.kernel.org/)
   # [Linux kernel](https://nixos.wiki/wiki/Linux_kernel)
+  # [linuxPackages_custom_tinyconfig_kernel](linuxPackages_custom_tinyconfig_kernel)
+  # [linux_6_11](https://search.nixos.org/packages?channel=24.05&from=0&size=50&sort=relevance&type=packages&query=linux_6_11)
+  # [linuxKernel.packages.linux_6_11](https://mynixos.com/packages/linuxKernel.packages.linux_6_11)
   # boot.kernelPackages = pkgs.linuxPackages_5_15;
   boot.kernelPackages = pkgs.linuxPackages_6_11;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "westie";
   networking.networkmanager.enable = true;
