@@ -2,9 +2,21 @@
 
   # requires --impure
   # imports = [ <home-manager/nixos> ];
+  # [User Management](https://nlewo.github.io/nixos-manual-sphinx/configuration/user-mgmt.xml.html)
+  # [users.users.<name>](https://mynixos.com/options/users.users.%3Cname%3E)
 
   users.groups.admin = {};
   users.users = {
+    mwoodpatrick = {
+      description = "Mark L. Wood-Patrick";
+      isNormalUser = true;
+      uid = 1000;
+      group = "users";
+      extraGroups = [ "wheel" "libvirt" "admin" ];
+      initialPassword = "westie";
+      packages = [ pkgs.cowsay ]; # echo "hello world" | cowsay
+    };
+
     admin = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
@@ -25,13 +37,6 @@
       openssh.authorizedKeys.keys = [
           # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
         ];
-    };
-
-    mwoodpatrick = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" "libvirt" ];
-      initialPassword = "westie";
-      packages = [ pkgs.cowsay ]; # echo "hello world" | cowsay
     };
 
     # security.sudo.wheelNeedsPassword = false;
