@@ -1,3 +1,5 @@
+# build: nixos-rebuild build-vm --flake .#my-first-gui
+# run: ./result/bin/run-my-first-nixos-gui-vm
 {
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
@@ -7,7 +9,7 @@
     in
     {
       # test is a hostname for our machine
-      nixosConfigurations.my-first-gui-vm = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.my-first-gui = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
           ./configuration.nix

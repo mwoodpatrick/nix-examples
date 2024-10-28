@@ -13,14 +13,14 @@
     admin = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
-      password = "admin";
+      password = "westie";
       group = "admin";
     };
 
     alice = {
         isNormalUser = true;
         extraGroups = [ "wheel" ];
-        initialPassword = "test";
+        initialPassword = "westie";
     };
   };
 
@@ -53,7 +53,7 @@
     settings.PasswordAuthentication = true;
   };
 
-  networking.hostName = "my-first-nixos-gui-vm";
+  networking.hostName = "my-first-nixos-gui";
   networking.networkmanager.enable = true;
   networking.firewall.allowedTCPPorts = [ 22 ];
 
