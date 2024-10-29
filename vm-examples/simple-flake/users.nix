@@ -15,6 +15,14 @@
       extraGroups = [ "wheel" "libvirt" "admin" ];
       initialPassword = "westie";
       packages = [ pkgs.cowsay ]; # echo "hello world" | cowsay
+
+      # ssh-keygen  -C "My key for mwoodpatrick.org" -t ed25519
+      openssh.authorizedKeys = {
+        keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDJP4QptwY8hbADKK9esL1gU53gWRImyk9Y7s3vNjReT"
+         ];
+         # keyFiles = [ "${builtins.getEnv "HOME"}/.ssh/id_rsa.pub" ];
+      };
     };
 
     admin = {

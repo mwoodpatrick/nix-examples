@@ -15,13 +15,19 @@
  
   time.timeZone = "America/Los_Angeles";
 
-  
   virtualisation.vmVariant = {
     # following configuration is added only when building VM with build-vm
     virtualisation = {
+      forwardPorts = [
+        { from = "host"; host.port = 8022; guest.port = 22; }
+        { from = "host"; host.port = 8080; guest.port = 80; }
+      ];
+
       memorySize = 2048; # Use 2048MiB memory.
       cores = 3;
       graphics = ui.enable;
+      diskSize = 50000;
+      resolution = { x =1280; y = 1024; };
     };
   
   westie.ui.enable = ui.enable;
@@ -42,7 +48,17 @@
     settings.PasswordAuthentication = true;
   };
 
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  services.nginx = {
+    enable = true;
+    virtualHosts."localhost" = {
+      default = true;
+      locations."/" = {
+        return = "200 'Hello World!'";
+      };
+    };
+  };
+
+  networking.firewall.allowedTCPPorts = [ 22 80 ];
   environment.systemPackages = with pkgs; [
     htop
     vim

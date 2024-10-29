@@ -26,6 +26,8 @@
 #              nix build ./#nixosConfigurations.westie-vm.config.system.build.vm 
 #              nixos-rebuild build-vm --flake .#westie-vm
 # run with: ./result/bin/run-westie-vm
+# ssh with: ssh -p 8022 mwoodpatrick@127.0.0.1
+# wget with: wget http://127.0.0.1:8080
 {
   inputs = {
     # Nixpkgs
@@ -41,7 +43,6 @@
       system = "x86_64-linux";
     in
     {
-      # test is a hostname for our machine
       nixosConfigurations.westie-vm = nixpkgs.lib.nixosSystem {
         inherit system;
 
