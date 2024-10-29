@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, ... }: let ui.enable = false ; in {
 # customize kernel version
   # [The Linux Kernel Archives](https://www.kernel.org/)
   # [Linux kernel](https://nixos.wiki/wiki/Linux_kernel)
@@ -21,9 +21,10 @@
     virtualisation = {
       memorySize = 2048; # Use 2048MiB memory.
       cores = 3;
-      graphics = false;
+      graphics = ui.enable;
     };
   
+  westie.ui.enable = ui.enable;
     # [virtualisation.sharedDirectories](https://mynixos.com/nixpkgs/option/virtualisation.sharedDirectories)
     # An attributes set of directories that will be shared with the
     # virtual machine using VirtFS (9P filesystem over VirtIO).

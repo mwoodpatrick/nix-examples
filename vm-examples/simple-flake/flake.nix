@@ -56,6 +56,7 @@
         modules = [
           ./configuration.nix
           ./users.nix
+          ./ui.nix
 
           # [Home Manager](https://nixos-and-flakes.thiscute.world/nixos-with-flakes/start-using-home-manager)
           # [Home Manager - NixOS module](https://nix-community.github.io/home-manager/#sec-install-nixos-module)
