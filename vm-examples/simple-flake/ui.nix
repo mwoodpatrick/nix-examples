@@ -17,11 +17,15 @@
     #config contents
     # fontconfig.enable = true;
     services.xserver.enable = true;
-    services.xserver.displayManager.gdm.enable = true;
-    services.xserver.desktopManager.gnome.enable = true;
+    # services.xserver.displayManager.gdm.enable = true;
+    # services.xserver.desktopManager.gnome.enable = true;
     # services.xserver.desktopManager.gnome3.enable = true;
 
-    services.dbus.packages = with pkgs; [ gnome2.GConf ];
+    # services.dbus.packages = with pkgs; [ gnome2.GConf ];
+    
+    # [Pantheon Desktop](https://nixos.org/manual/nixos/stable/#chap-pantheon)
+    services.xserver.displayManager.lightdm.enable = true;
+    services.xserver.desktopManager.pantheon.enable = true;
 
     services.qemuGuest.enable = true;
   
