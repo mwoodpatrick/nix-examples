@@ -18,10 +18,14 @@
 
       # ssh-keygen  -C "My key for mwoodpatrick.org" -t ed25519
       openssh.authorizedKeys = {
-        keys = [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDJP4QptwY8hbADKK9esL1gU53gWRImyk9Y7s3vNjReT"
-         ];
-         # keyFiles = [ "${builtins.getEnv "HOME"}/.ssh/id_rsa.pub" ];
+        # keys = [
+        #   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDJP4QptwY8hbADKK9esL1gU53gWRImyk9Y7s3vNjReT"
+        #  ];
+        # error: access to absolute path '/.ssh' is forbidden in pure evaluation mode (use '--impure' to override)
+        # [users.users.<name>.openssh.authorizedKeys.keyFiles](https://mynixos.com/nix-darwin/option/users.users.%3Cname%3E.openssh.authorizedKeys.keyFiles)
+        # keyFiles requires a local path specification
+        # cp ~/.ssh/id_ed25519.pub .
+        keyFiles = [ ./id_ed25519.pub ];
       };
     };
 
