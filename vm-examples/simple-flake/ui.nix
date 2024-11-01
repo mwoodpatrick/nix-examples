@@ -1,3 +1,6 @@
+# [Desktop environment](https://wiki.nixos.org/wiki/Category:Desktop_environment)
+# [The 10 Best Linux Desktop Environments (2024 Update)](https://xtom.com/blog/the-10-best-linux-desktop-environments/)
+# [services.displayManager](https://mynixos.com/nixpkgs/options/services.displayManager)
 {
   lib,
   config,
@@ -25,7 +28,14 @@
     
     # [Pantheon Desktop](https://nixos.org/manual/nixos/stable/#chap-pantheon)
     services.xserver.displayManager.lightdm.enable = true;
-    services.xserver.desktopManager.pantheon.enable = true;
+
+
+    # [](https://mynixos.com/nixpkgs/options/services.xserver.desktopManager)
+    # services.xserver.desktopManager.pantheon.enable = true;
+    # services.xserver.desktopManager.plasma5.enable = true;
+    # services.xserver.desktopManager.budgie.enable = true;
+    # services.xserver.desktopManager.cinnamon.enable = true;
+    services.xserver.desktopManager.mate.enable = true;
 
     services.qemuGuest.enable = true;
   
