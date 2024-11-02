@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: let ui.enable = false ; in {
+{ config, lib, pkgs, ... }: let ui.enable = true ; in {
 # customize kernel version
   # [The Linux Kernel Archives](https://www.kernel.org/)
   # [Linux kernel](https://nixos.wiki/wiki/Linux_kernel)
