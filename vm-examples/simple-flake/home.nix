@@ -229,6 +229,18 @@
     };
   };
 
+  # [home-manager/modules/programs/vim.nix](https://github.com/nix-community/home-manager/blob/master/modules/programs/vim.nix)
+  programs.vim = {
+   enable = true;
+   plugins = with pkgs.vimPlugins; [ vim-airline ];
+   settings = { ignorecase = true; };
+   # See the Vim documentation for detailed descriptions of these
+   # [vim documentation](https://www.vim.org/docs.php)
+   extraConfig = ''
+     set mouse=a
+   '';
+  };
+
   # basic configuration of git
   programs.git = {
     enable = true;

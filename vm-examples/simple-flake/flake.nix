@@ -26,6 +26,7 @@
 #              nix build ./#nixosConfigurations.westie-vm.config.system.build.vm 
 #              nixos-rebuild build-vm --flake .#westie-vm
 # run with: ./result/bin/run-westie-vm
+# Access via: spicy -h localhost -p 5924
 # ssh with: ssh -p 8022 mwoodpatrick@127.0.0.1
 # wget with: wget http://127.0.0.1:8080
 {

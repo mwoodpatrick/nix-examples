@@ -10,6 +10,9 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # enable nested virtualization for your guests to run KVM hypervisors inside them
+  boot.extraModprobeConfig = "options kvm_intel nested=1";
+
   networking.hostName = "westie";
   networking.networkmanager.enable = true;
  
@@ -41,7 +44,29 @@
     virtualisation.sharedDirectories = {
       westie-share = { source = "/mnt/wsl"; target = "/mnt/wsl"; };
     };
+
+    # [Libvirt](https://wiki.nixos.org/wiki/Libvirt)
+    virtualisation.libvirtd.enable = true;
+
+    # Enable TPM emulation (optional)
+    virtualisation.libvirtd.qemu = {
+      swtpm.enable = true;
+      ovmf.packages = [ pkgs.OVMFFull.fd ];
+    };
+
+    # Enable USB redirection (optional)
+    virtualisation.spiceUSBRedirection.enable = true;
+
+    # [Qemu/kvm copy & paste](https://discourse.nixos.org/t/qemu-kvm-copy-paste/31247/2)
+    virtualisation.qemu.options = [
+      "-vga qxl"
+      "-spice port=5924,disable-ticketing=on"
+      "-device virtio-serial -chardev spicevmc,id=vdagent,debug=0,name=vdagent"
+      "-device virtserialport,chardev=vdagent,name=com.redhat.spice.0"
+    ];
   };
+
+  services.spice-vdagentd.enable = true;
 
   services.openssh = {
     enable = true;
@@ -63,6 +88,8 @@
     htop
     vim
     git
+    # [spice-gtk](https://mynixos.com/nixpkgs/package/spice-gtk)
+    spice-gtk
     wget
   ];
 
