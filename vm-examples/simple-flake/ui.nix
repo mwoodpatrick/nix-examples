@@ -1,4 +1,11 @@
 # [Desktop environment](https://wiki.nixos.org/wiki/Category:Desktop_environment)
+# [Checking Whether the Display Server Is Xorg or Wayland](https://www.baeldung.com/linux/display-server-xorg-wayland)
+# echo $XDG_SESSION_TYPE
+#   x11
+#
+# echo $DESKTOP_SESSION
+#   mate
+#
 # [The 10 Best Linux Desktop Environments](2024 Update)](https://xtom.com/blog/the-10-best-linux-desktop-environments/)
 # [services.displayManager](https://mynixos.com/nixpkgs/options/services.displayManager)
 # [Checking Whether the Display Server Is Xorg or Wayland](https://www.baeldung.com/linux/display-server-xorg-wayland)
@@ -45,6 +52,8 @@
   config = lib.mkIf cfg.enable {
     #config contents
     # fontconfig.enable = true;
+
+    # Enable the X server:
     services.xserver.enable = true;
     # services.xserver.displayManager.gdm.enable = true;
     # services.xserver.desktopManager.gnome.enable = true;
@@ -58,15 +67,22 @@
 
     # services.dbus.packages = with pkgs; [ gnome2.GConf ];
     
+    # [Select the display manager](https://mynixos.com/nixpkgs/options/services.displayManager):
     # [Pantheon Desktop](https://nixos.org/manual/nixos/stable/#chap-pantheon)
     services.xserver.displayManager.lightdm.enable = true;
 
+    # [Select the desktop environment](https://mynixos.com/nixpkgs/options/services.xserver.desktopManager):
     # [https://mynixos.com/options/services.xserver.desktopManager](https://mynixos.com/nixpkgs/options/services.xserver.desktopManager)
     # services.xserver.desktopManager.pantheon.enable = true; # Enable the pantheon desktop manager.
     # services.xserver.desktopManager.plasma5.enable = true; # Enable the Plasma 5 (KDE 5) desktop environment.
+    services.desktopManager.plasma6.enable = true; # Enable the Plasma 6 (KDE 6) desktop environment.
     # services.xserver.desktopManager.budgie.enable = true; # Enable the Budgie desktop manager.
     # services.xserver.desktopManager.cinnamon.enable = true; $ Enable the cinnamon desktop manager.
     # services.xserver.desktopManager.deepin.enable = true; # Whether to enable Deepin desktop manager.
+
+    # [MATE Desktop Environment](https://mate-desktop.org/)
+    # [Desktop entries](https://wiki.archlinux.org/title/Desktop_entries?form=MG0AV3)
+    # [services.xserver.desktopManager.mate](https://mynixos.com/nixpkgs/options/services.xserver.desktopManager.mate)
     services.xserver.desktopManager.mate.enable = true; # Enable the MATE desktop environment.
     # services.xserver.desktopManager.xterm.enable = true; # Enable a xterm terminal as a desktop manager
 

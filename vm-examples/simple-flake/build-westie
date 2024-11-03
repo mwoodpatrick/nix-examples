@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+nix build ./#nixosConfigurations.westie-vm.config.system.build.vm

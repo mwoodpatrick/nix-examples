@@ -50,7 +50,10 @@
     kitty # [Kitty](https://wiki.nixos.org/wiki/Kitty)
     git
     gh
-    neovim
+    # neovim
+    # neovim-qt
+    # neovim-gtk
+    neovide
     wget
     curl
     home-manager
@@ -241,6 +244,28 @@
    '';
   };
 
+  # basic configuration of neovim
+  # [Manage Neovim plugins (and more!) with Nix and Home Manager](https://gist.github.com/nat-418/d76586da7a5d113ab90578ed56069509)
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+    vimdiffAlias = true;
+    plugins = with pkgs.vimPlugins; [
+      nvim-lspconfig
+      nvim-treesitter.withAllGrammars
+      plenary-nvim
+      gruvbox-material
+      mini-nvim
+    ];
+  };
+
+  # [programs.zsh](https://home-manager-options.extranix.com/?query=programs.zsh&release=master)
+  programs.zsh = {
+      enable = true;
+  };
+
   # basic configuration of git
   programs.git = {
     enable = true;
@@ -250,4 +275,4 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-}
+  }

@@ -72,6 +72,15 @@
 
             home-manager.users.mwoodpatrick = import ./home.nix;
 
+#            home-manager.home.autostart = {
+#                https://home-manager-options.extranix.com/?query=xsession.windowManager.i3.config&release=master
+#                mwoodpatrick = {
+#                    name = "MATE Terminal";
+#                    exec = "mate-terminal";
+#                    terminal = false;
+#                };
+#            };
+
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
           }
         ];
