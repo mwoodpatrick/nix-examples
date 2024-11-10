@@ -55,6 +55,14 @@
 
     # Enable the X server:
     services.xserver.enable = true;
+    # services.displayManager.sessionPackages = [pkgs.mate.mate-session-manager pkgs.budgie-desktop];
+    services.xserver.displayManager.lightdm.greeters.slick = {
+      enable = true;
+      theme = { name = "Qogir"; package = pkgs.qogir-theme; };
+      iconTheme = { name = "Qogir"; package = pkgs.qogir-icon-theme; };
+      cursorTheme = { name = "Qogir"; package = pkgs.qogir-icon-theme; };
+    };
+
     # services.xserver.displayManager.gdm.enable = true;
     # services.xserver.desktopManager.gnome.enable = true;
     # services.xserver.desktopManager.gnome3.enable = true;
@@ -70,14 +78,22 @@
     # [Select the display manager](https://mynixos.com/nixpkgs/options/services.displayManager):
     # [Pantheon Desktop](https://nixos.org/manual/nixos/stable/#chap-pantheon)
     services.xserver.displayManager.lightdm.enable = true;
-
+    services.displayManager.defaultSession = "budgie-desktop";
     # [Select the desktop environment](https://mynixos.com/nixpkgs/options/services.xserver.desktopManager):
     # [https://mynixos.com/options/services.xserver.desktopManager](https://mynixos.com/nixpkgs/options/services.xserver.desktopManager)
     # services.xserver.desktopManager.pantheon.enable = true; # Enable the pantheon desktop manager.
-    # services.xserver.desktopManager.plasma5.enable = true; # Enable the Plasma 5 (KDE 5) desktop environment.
-    services.desktopManager.plasma6.enable = true; # Enable the Plasma 6 (KDE 6) desktop environment.
-    # services.xserver.desktopManager.budgie.enable = true; # Enable the Budgie desktop manager.
-    # services.xserver.desktopManager.cinnamon.enable = true; $ Enable the cinnamon desktop manager.
+    # nixos/modules/services/x11/desktop-managers/plasma5.nix
+    services.xserver.desktopManager.plasma5.enable = true; # Enable the Plasma 5 (KDE 5) desktop environment.
+    # services.xserver.desktopManager.plasma6.enable = true; # Enable the Plasma 6 (KDE 6) desktop environment.
+    # nixos/modules/services/x11/desktop-managers/budgie.nix
+    services.xserver.desktopManager.budgie.enable = true; # Enable the Budgie desktop manager.
+    # nixos/modules/services/x11/desktop-managers/cinnamon.nix
+    services.xserver.desktopManager.cinnamon.enable = true; # Enable the cinnamon desktop manager.
+    # error: The option `virtualisation.vmVariant.services.displayManager.defaultSession' has conflicting definition values:
+    #   - In `/nix/store/0az17ihialzgdlg2r9jinzmh23dka8qz-source/nixos/modules/services/x11/desktop-managers/deepin.nix': "dde-x11"
+    #   - In `/nix/store/0az17ihialzgdlg2r9jinzmh23dka8qz-source/nixos/modules/services/x11/desktop-managers/pantheon.nix': "pantheon"
+    #   Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
+    # nixos/modules/services/x11/desktop-managers/deepin.nix
     # services.xserver.desktopManager.deepin.enable = true; # Whether to enable Deepin desktop manager.
 
     # [MATE Desktop Environment](https://mate-desktop.org/)
@@ -97,11 +113,27 @@
     # [Setting Priorities](https://nixos.org/manual/nixos/stable/#sec-option-definitions-setting-priorities)
     # services.spice-vdagentd.enable = mkSure true;
 
+    #[Help! I cant have Pantheon, Gnome and Plasma installed on my system at the same time - Help - NixOS Discourse](https://discourse.nixos.org/t/help-i-cant-have-pantheon-gnome-and-plasma-installed-on-my-system-at-the-same-time/47346/4)
+    environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR =
+    let
+      cfg = config.services.xserver.desktopManager.gnome;
+      nixos-background-light = pkgs.nixos-artwork.wallpapers.simple-blue;
+      nixos-background-dark = pkgs.nixos-artwork.wallpapers.simple-dark-gray;
+      flashbackEnabled = cfg.flashback.enableMetacity || lib.length cfg.flashback.customSessions > 0;
+      nixos-gsettings-desktop-schemas = pkgs.gnome.nixos-gsettings-overrides.override {
+        inherit (cfg) extraGSettingsOverrides extraGSettingsOverridePackages favoriteAppsOverride;
+        inherit flashbackEnabled nixos-background-dark nixos-background-light;
+      };
+    in
+    lib.mkForce (pkgs.glib.getSchemaPath nixos-gsettings-desktop-schemas);
+
+
     environment.systemPackages = with pkgs; [
       # https://nixos.wiki/wiki/Vim
       # gvim
       # https://nixos.wiki/wiki/Firefox
       firefox-unwrapped
+      xorg.xdpyinfo
     ];
   };
 }
