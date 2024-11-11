@@ -37,19 +37,22 @@
     # Home manager
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    themes.url = "github:RGBCube/ThemeNix";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... } @ inputs :
+  outputs = { self, nixpkgs, home-manager, themes, ... } @ inputs :
     let
       system = "x86_64-linux";
     in
     {
+      
       nixosConfigurations.westie-vm = nixpkgs.lib.nixosSystem {
         inherit system;
 
         # Set all inputs parameters as special arguments for all submodules,
         # so you can directly use all dependencies in inputs in submodules
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs; westieTheme = themes.tango; };
 
         # This module works the same as the `specialArgs` parameter we used above
         # choose one of the two methods to use

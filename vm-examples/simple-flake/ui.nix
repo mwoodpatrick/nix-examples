@@ -38,6 +38,7 @@
   lib,
   config,
   pkgs,
+  westieTheme,
   ...
 }: let cfg = config.westie.ui; in {
   imports = [
@@ -56,12 +57,31 @@
     # Enable the X server:
     services.xserver.enable = true;
     # services.displayManager.sessionPackages = [pkgs.mate.mate-session-manager pkgs.budgie-desktop];
+
+    # [nixos/modules/services/x11/display-managers/lightdm-greeters/slick.nix](nixos/modules/services/x11/display-managers/lightdm-greeters/slick.nix)
+    # [pkgs/applications/display-managers/lightdm-slick-greeter/default.nix](https://github.com/NixOS/nixpkgs/blob/nixos-24.05/pkgs/applications/display-managers/lightdm-slick-greeter/default.nix)
+    # [A slick-looking LightDM greeter](https://github.com/linuxmint/slick-greeter)
+    # [slick options](https://mynixos.com/search?q=services.xserver.displayManager.lightdm.greeters.slick)
     services.xserver.displayManager.lightdm.greeters.slick = {
-      enable = true;
-      theme = { name = "Qogir"; package = pkgs.qogir-theme; };
-      iconTheme = { name = "Qogir"; package = pkgs.qogir-icon-theme; };
-      cursorTheme = { name = "Qogir"; package = pkgs.qogir-icon-theme; };
-    };
+        enable = true;
+        # Taken from mint-artwork.gschema.override
+        # theme = westieTheme;
+        theme = { name = "Mint-Y-Aqua"; package = pkgs.mint-themes; };
+        iconTheme = { name = "Mint-Y-Sand"; package = pkgs.mint-y-icons; };
+        cursorTheme = { name = "Bibata-Modern-Classic"; package = pkgs.mint-cursor-themes; };
+        extraConfig = ''
+            background=#772953
+            background-color=#000077
+        '';
+      };
+
+#    services.xserver.displayManager.lightdm.greeters.slick = {
+#      enable = true;
+#      # theme = { name = "Qogir"; package = pkgs.qogir-theme; };
+#      # theme = westieTheme;
+#      iconTheme = { name = "Qogir"; package = pkgs.qogir-icon-theme; };
+#      cursorTheme = { name = "Qogir"; package = pkgs.qogir-icon-theme; };
+#    };
 
     # services.xserver.displayManager.gdm.enable = true;
     # services.xserver.desktopManager.gnome.enable = true;
@@ -75,10 +95,11 @@
 
     # services.dbus.packages = with pkgs; [ gnome2.GConf ];
     
+    # See environment variable DESKTOP_SESSION for the DE
     # [Select the display manager](https://mynixos.com/nixpkgs/options/services.displayManager):
     # [Pantheon Desktop](https://nixos.org/manual/nixos/stable/#chap-pantheon)
     services.xserver.displayManager.lightdm.enable = true;
-    services.displayManager.defaultSession = "budgie-desktop";
+    services.displayManager.defaultSession = "mate";
     # [Select the desktop environment](https://mynixos.com/nixpkgs/options/services.xserver.desktopManager):
     # [https://mynixos.com/options/services.xserver.desktopManager](https://mynixos.com/nixpkgs/options/services.xserver.desktopManager)
     # services.xserver.desktopManager.pantheon.enable = true; # Enable the pantheon desktop manager.

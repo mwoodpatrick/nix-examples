@@ -96,6 +96,8 @@
     nmap # A utility for network discovery and security auditing
     ipcalc  # it is a calculator for the IPv4/v6 addresses
 
+    wmctrl # CLI tool to interact with EWMH/NetWM compatible X Window Managers
+
     # misc
     cowsay
     file
@@ -195,19 +197,32 @@
   #
   #  /etc/profiles/per-user/mwoodpatrick/etc/profile.d/hm-session-vars.sh
   #
+  # Note these env vars are written to:
+  #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
   home.sessionVariables = {
     EDITOR = "nvim";
     GIT_ROOT = "/mnt/wsl/projects/git";
+    LIBGL_ALWAYS_SOFTWARE = 1; # Need for Flutter since hardware render does not work on my laptops!
+    PATH = "$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin";
   };
 
   programs.direnv.enable = true;
+
+  # By default no channels are added to VM so the command_not_found_handle does
+  # not find the channels/nixos/programs.sqlite is not found and there is no
+  # recommendation for an ephemeral environment to run missing commands.
+  # Fix by adding a channel e.g.:
+  # 
+  #  nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+  #  nix-channel --list
+  #  nix update
 
   programs.bash = {
     enable = true;
     enableCompletion = true;
     # TODO add your custom bashrc here
     bashrcExtra = ''
-      export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
+      source ~/.nix-profile/etc/profile.d/hm-session-vars.sh
     '';
 
     # set some aliases, feel free to add more or remove some

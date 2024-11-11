@@ -13,6 +13,11 @@
   # enable nested virtualization for your guests to run KVM hypervisors inside them
   boot.extraModprobeConfig = "options kvm_intel nested=1";
 
+  nix.settings = {
+        experimental-features = [ "nix-command" "flakes" ];
+        warn-dirty = false;
+  };
+
   networking.hostName = "westie";
   networking.networkmanager.enable = true;
  
