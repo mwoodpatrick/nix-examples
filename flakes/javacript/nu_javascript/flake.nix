@@ -1,3 +1,5 @@
+# Start by running: nix develop
+# [Zero to Nix](https://zero-to-nix.com/start/)
 {
   description = "Example JavaScript development environment for Zero to Nix";
 
