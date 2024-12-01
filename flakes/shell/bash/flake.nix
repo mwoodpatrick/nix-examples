@@ -7,23 +7,26 @@
 # [View 0xmycf's full-sized avatar
 # [0xmycf my-nix-flake-templates](https://github.com/0xmycf/my-nix-flake-templates.git)
 # [flake-utils](https://github.com/numtide/flake-utils)
-# nix flake show templates
-# nix flake init -t templates#bash-hello
+# [nix flake show [option...] flake-url](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-show) Show the output attributes provided by the patchelf flake:
+# [nix flake init -t templates#bash-hello](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-init)
 # git add flake.nix # required otherwise it will not build
-# nix build
-# nix flake show # show the outputs provided by a flake
-# nix flake [--debug] metadata .
-# nix flake check -v # check whether the flake evaluates and run its tests
-# nix flake metadata # show flake metadata
-# nix develop # needs devshell (not provided here) run a bash shell that provides the build environment of a derivation
+# [nix build](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-build) build a derivation or fetch a store path
+# [nix flake show](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-show) # show the outputs provided by a flake
+# [nix flake check -v](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-check) # check whether the flake evaluates and run its tests
+# [nix flake [--debug] metadata](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-metadata) # show flake metadata
+# [nix develop](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-develop.html?form=MG0AV3) # needs devshell (not provided here) run a bash shell that provides the build environment of a derivation
 # Note: this flake does not provide attribute 'devShells.x86_64-linux.default', 'devShell.x86_64-linux', 'packages.x86_64-linux.default' or 'defaultPackage.x86_64-linux'
 {
   description = "An over-engineered Hello World in bash";
 
   # Nixpkgs / NixOS version to use.
-  inputs.nixpkgs.url = "nixpkgs/nixos-21.05";
+  inputs = 
+    {
+      nixpkgs.url = "nixpkgs/nixos-21.05";
+      old-python-nixpkgs.url = "github:nixos/nixpkgs/2030abed5863fc11eccac0735f27a0828376c84e";
+    };
 
-  outputs = { self, nixpkgs }:
+  outputs = { self, nixpkgs, ... }@inputs:
     let
 
       # to work with older version of flakes
@@ -143,5 +146,44 @@
           }
         );
 
+         # Add dependencies that are only needed for development
+      devShells = forAllSystems (system:
+        let
+          pkgs = nixpkgsFor.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [ hello ];
+
+          nativeBuildInputs = with pkgs; [
+              nodejs
+              inputs.old-python-nixpkgs.legacyPackages.${system}.python36
+            ];
+
+          shellHook = ''
+            echo "welcome"
+            # source ./something.sh
+            echo "to my shell!" | ${pkgs.lolcat}/bin/lolcat 
+        '';
+
+  COLOR = "blue";
+
+  # PASSWORD = import ./password.nix;
+          };
+        });
+
     };
+# --- Flake Local Nix Configuration ----------------------------
+nixConfig = {
+    # This sets the flake to use the IOG nix cache.
+    # Nix should ask for permission before using it,
+    # but remove it here if you do not want it to.
+    # extra-substituters = ["https://cache.iog.io"];
+    # extra-trusted-public-keys = ["hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="];
+    # allow-import-from-derivation = "true";
+    # bash-prompt = "bash_prompt";
+    # bash-prompt-prefix = "bash-prompt-prefix";
+    bash-prompt-suffix = "devshell: ";
+    # flake-registry
+  };
 }
