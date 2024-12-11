@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+ssh -p 8022 mwoodpatrick@127.0.0.1
