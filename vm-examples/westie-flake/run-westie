@@ -1,3 +1,2 @@
 #!/usr/bin/env bash
- ./result/bin/run-westie-vm &
- spicy -h localhost -p 5924 &
+./result/bin/run-westie-vm &
