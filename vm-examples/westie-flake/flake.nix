@@ -1,4 +1,8 @@
-
+# For sources of inspiration see:
+# [Rebuilding my NixOS config - Part 0: 🔧 NixOS Flakes & Git Basics: Everything You Need to Know](https://www.youtube.com/watch?v=43VvFgPsPtY)
+# url = https://code.m3tam3re.com/m3tam3re/nixcfg.git
+# https://github.com/Misterio77/nix-starter-configs
+# https://github.com/Misterio77/nix-config
 # [Practical Nix flake anatomy: a guided tour of flake.nix#nixosConfigurations](https://vtimofeenko.com/posts/practical-nix-flake-anatomy-a-guided-tour-of-flake.nix/#nixosconfigurations)
 # [Debugging with nix repl](https://nixos-and-flakes.thiscute.world/best-practices/debugging#debugging-with-nix-repl)
 # [Learn how to use the Nix REPL effectively](https://aldoborrero.com/posts/2022/12/02/learn-how-to-use-the-nix-repl-effectively)
@@ -30,13 +34,17 @@
 # ssh with: ssh -p 8022 mwoodpatrick@127.0.0.1
 # wget with: wget http://127.0.0.1:8080
 {
-  inputs = {
-    # Nixpkgs
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
+  inputs = {
     # Home manager
-    home-manager.url = "github:nix-community/home-manager/master";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Nixpkgs
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
 
     themes.url = "github:RGBCube/ThemeNix";
   };
