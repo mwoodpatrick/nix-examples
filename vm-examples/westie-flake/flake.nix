@@ -51,50 +51,71 @@
 
   outputs = { self, nixpkgs, home-manager, themes, ... } @ inputs :
     let
+      inherit (self) outputs;
+      systems = [
+        "aarch64-linux"
+        "i686-linux"
+        "x86_64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
       system = "x86_64-linux";
     in
     {
-      
-      nixosConfigurations.westie-vm = nixpkgs.lib.nixosSystem {
-        inherit system;
+      # forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      # overlays = import ./overlays {inherit inputs;};
 
-        # Set all inputs parameters as special arguments for all submodules,
-        # so you can directly use all dependencies in inputs in submodules
-        specialArgs = { inherit inputs; westieTheme = themes.tango; };
+      nixosConfigurations = {
+          westie-vm = nixpkgs.lib.nixosSystem {
+            inherit system;
+    
+            # Set all inputs parameters as special arguments for all submodules,
+            # so you can directly use all dependencies in inputs in submodules
+            specialArgs = { inherit inputs outputs; westieTheme = themes.tango; };
+    
+            # This module works the same as the `specialArgs` parameter we used above
+            # choose one of the two methods to use
+            # { _module.args = { inherit inputs; };}
+    
+            modules = [
+              ./configuration.nix
+              ./users.nix
+              ./ui.nix
+    
+              # [Home Manager](https://nixos-and-flakes.thiscute.world/nixos-with-flakes/start-using-home-manager)
+              # [Home Manager - NixOS module](https://nix-community.github.io/home-manager/#sec-install-nixos-module)
+              # make home-manager as a module of nixos
+              # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
+              home-manager.nixosModules.home-manager
+              {
+                # home-manager.logLevel = "debug";
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+    
+                home-manager.users.mwoodpatrick = import ./home.nix;
+    
+    #            home-manager.home.autostart = {
+    #                https://home-manager-options.extranix.com/?query=xsession.windowManager.i3.config&release=master
+    #                mwoodpatrick = {
+    #                    name = "MATE Terminal";
+    #                    exec = "mate-terminal";
+    #                    terminal = false;
+    #                };
+    #            };
+    
+                # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
+              }
+            ];
+        };
+      };
 
-        # This module works the same as the `specialArgs` parameter we used above
-        # choose one of the two methods to use
-        # { _module.args = { inherit inputs; };}
-
-        modules = [
-          ./configuration.nix
-          ./users.nix
-          ./ui.nix
-
-          # [Home Manager](https://nixos-and-flakes.thiscute.world/nixos-with-flakes/start-using-home-manager)
-          # [Home Manager - NixOS module](https://nix-community.github.io/home-manager/#sec-install-nixos-module)
-          # make home-manager as a module of nixos
-          # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
-          home-manager.nixosModules.home-manager
-          {
-            # home-manager.logLevel = "debug";
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-
-            home-manager.users.mwoodpatrick = import ./home.nix;
-
-#            home-manager.home.autostart = {
-#                https://home-manager-options.extranix.com/?query=xsession.windowManager.i3.config&release=master
-#                mwoodpatrick = {
-#                    name = "MATE Terminal";
-#                    exec = "mate-terminal";
-#                    terminal = false;
-#                };
-#            };
-
-            # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-          }
-        ];
+      homeConfigurations = {
+        "mwoodpatrick@westie-vm" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+          extraSpecialArgs = {inherit inputs outputs;};
+          # modules = [./home/mwoodpatrick/westie-vm.nix];
+        };
       };
     };
 }
