@@ -1,2 +1,4 @@
 result
 *.tar.gz
+*.qcow2 
+*.swp
