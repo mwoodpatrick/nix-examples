@@ -73,6 +73,7 @@
 
   services.spice-vdagentd.enable = true;
 
+  # need ssh key in repo (e.g. id_ed25519.pub) with permissions -rw-r--r--
   services.openssh = {
     enable = true;
     settings.PasswordAuthentication = true;

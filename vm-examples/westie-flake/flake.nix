@@ -63,8 +63,8 @@
       system = "x86_64-linux";
     in
     {
-      # forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-      # overlays = import ./overlays {inherit inputs;};
+      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      overlays = import ./overlays {inherit inputs;};
 
       nixosConfigurations = {
           westie-vm = nixpkgs.lib.nixosSystem {
