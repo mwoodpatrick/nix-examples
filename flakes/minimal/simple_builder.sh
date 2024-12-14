@@ -1,1 +1,2 @@
-mkdir $out
+declare -xp
+echo foo > $out
