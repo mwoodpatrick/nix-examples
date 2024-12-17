@@ -1,4 +1,5 @@
 result
+result-bin
 *.tar.gz
 *.qcow2 
 *.swp
