@@ -23,7 +23,10 @@
 
         packages = rec {
           hello = pkgs.stdenv.mkDerivation rec {
-            name = "hello-flake";
+            # name = "${pname}-${version}"
+            pname = "hello";
+            version = "0.0.1";
+            description = "description";
 
             src = ./.;
 
@@ -44,14 +47,41 @@
                 cp hello $out/bin/
                 chmod +x $out/bin/hello
               '';
+
+            meta = { description = "An example application"; 
+                     homepage = "https://example.com"; 
+                     license = pkgs.lib.licenses.mit; 
+                     mainProgram = "exampleApp"; 
+                    };
           };
           default = hello;
+        };
+
+        checks = rec {
+
+            # Additional tests, if applicable.
+            test = pkgs.stdenv.mkDerivation {
+              name = "hello-test";
+
+              buildInputs = [ self.packages.${system}.hello ];
+
+              unpackPhase = "true";
+
+              buildPhase = ''
+                echo 'running some integration tests'
+                [[ $(hello) = 'Hello Nixers!' ]]
+              '';
+
+              installPhase = "mkdir -p $out";
+            };
         };
 
         apps = rec {
           hello = flake-utils.lib.mkApp { drv = self.packages.${system}.hello; };
           default = hello;
         };
+
+
       }
     );
 }
