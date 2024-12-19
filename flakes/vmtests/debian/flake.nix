@@ -1,4 +1,9 @@
 # [Getting Started - nix-vm-test](https://github.com/numtide/nix-vm-test/blob/main/doc/getting-started.md)
+#
+# nix run
+# nix run .#hello
+# nix run .#test-vm
+# nix run .#test-vm-interactive
 {
   description = "A very basic flake";
 
@@ -9,15 +14,11 @@
     nix-vm-test.url = "github:numtide/nix-vm-test";
   };
 
-  outputs = { self, nixpkgs, nix-vm-test }: {
-
-    packages.x86_64-linux.hello = nixpkgs.legacyPackages.x86_64-linux.hello;
-
-    # packages.x86_64-linux.default = self.packages.x86_64-linux.hello;
-
+  outputs = { self, nixpkgs, nix-vm-test }:
     # Create a test for Debian 13
-    packages.x86_64-linux.test-vm =
       let
+        system = "x86_64-linux";
+        pkgs = import nixpkgs { inherit system; };
         vmTest = nix-vm-test.lib.x86_64-linux.debian."13" {
 
           # This makes the guest-shared folder available in the test at /mnt/host-shared
@@ -49,8 +50,12 @@
             vm.succeed("apt-get -yq install /mnt/host-shared/hello.deb")
           '';
         };
-        in vmTest.driver; # vmTest.driverInteractive;
-
-    packages.x86_64-linux.default = self.packages.x86_64-linux.test-vm;
-  };
+        in {
+            packages.x86_64-linux = rec {
+                hello = nixpkgs.legacyPackages.x86_64-linux.hello;
+                test-vm = vmTest.driver;
+                test-vm-interactive = vmTest.driverInteractive;
+                default = test-vm;
+            };
+        };
 }
