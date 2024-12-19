@@ -19,7 +19,9 @@
       let
         system = "x86_64-linux";
         pkgs = import nixpkgs { inherit system; };
-        vmTest = nix-vm-test.lib.x86_64-linux.debian."13" {
+        distro = "debian";
+        version = "13";
+        vmTest = nix-vm-test.lib.${system}.${distro}.${version} {
 
           # This makes the guest-shared folder available in the test at /mnt/host-shared
 
@@ -51,6 +53,9 @@
           '';
         };
         in {
+            # Run the sandboxed run with `nix flake check`
+            checks.x86_64-linux.myTest = vmTest.sandboxed;
+
             packages.x86_64-linux = rec {
                 hello = nixpkgs.legacyPackages.x86_64-linux.hello;
                 test-vm = vmTest.driver;
