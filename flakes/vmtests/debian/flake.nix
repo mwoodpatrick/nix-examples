@@ -20,12 +20,12 @@
       let
         vmTest = nix-vm-test.lib.x86_64-linux.debian."13" {
 
-          # This makes the current folder available in the test at /mnt/debdir
+          # This makes the guest-shared folder available in the test at /mnt/host-shared
 
           sharedDirs = {
             debDir = {
-              source = "${./.}";
-              target = "/mnt/debdir";
+              source = "${./guest-shared}";
+              target = "/mnt/host-shared";
             };
           };
 
@@ -38,11 +38,15 @@
 
             # Test that the mount worked
 
-            vm.succeed('ls /mnt/debdir')
+            vm.succeed('ls /mnt/host-shared')
+
+            # execute the tests
+
+            vm.succeed('/mnt/host-shared/tests.bash')
 
             # Test that the package installs
 
-            vm.succeed("apt-get -yq install /mnt/debdir/hello.deb")
+            vm.succeed("apt-get -yq install /mnt/host-shared/hello.deb")
           '';
         };
         in vmTest.driver; # vmTest.driverInteractive;
