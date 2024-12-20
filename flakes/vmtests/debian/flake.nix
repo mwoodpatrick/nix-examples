@@ -4,6 +4,8 @@
 # nix run .#hello
 # nix run .#test-vm
 # nix run .#test-vm-interactive
+# nix flake show
+# nix flake metadata
 {
   description = "A very basic flake";
 
@@ -20,7 +22,13 @@
         system = "x86_64-linux";
         pkgs = import nixpkgs { inherit system; };
         distro = "debian";
+        versions = {
+            debian = ["12" "13"];
+            ubuntu = ["23_10" "22_04"];
+            fedora = ["38" "39" ];
+        };
         version = "13";
+        vmTestv = { system?"x86_64-linux", distro?"debian", version?null, diskSize?"+1G", ... }@fattr : true;
         vmTest = nix-vm-test.lib.${system}.${distro}.${version} {
 
           # This makes the guest-shared folder available in the test at /mnt/host-shared
