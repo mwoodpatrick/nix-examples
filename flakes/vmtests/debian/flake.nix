@@ -27,9 +27,9 @@
         lib = pkgs.lib;
         distro = "debian";
         versions = {
-            debian = ["12" "13"];
+            debian = ["13" "12"];
             ubuntu = ["23_10" "22_04"];
-            fedora = ["41" "40" "39" ];
+            fedora = [ "40" "39" "38" ]; # ["41" "40" "39" ]
         };
         version = "13";
 
@@ -55,13 +55,18 @@
 
             vm.succeed('ls /mnt/host-shared')
 
-            # execute the tests
+            # source the tests
 
-            vm.succeed('/mnt/host-shared/tests.bash')
+            vm.succeed('source /mnt/host-shared/tests.bash')
 
-            # Test that the package installs
+            # install the packages
 
-            vm.succeed("apt-get -yq install /mnt/host-shared/hello.deb")
+            vm.succeed('install_packages')
+
+            # run the tests
+            vm.succeed('run_tests')
+
+            vm.succeed("")
           '';
         };
 
@@ -77,16 +82,19 @@
 
         in {
             # Run the sandboxed run with `nix flake check`
-            checks.x86_64-linux.myTest = vmTest.sandboxed;
+            checks.x86_64-linux.myTest = (vmTestv {distro=distro;}).sandboxed;
 
             packages.x86_64-linux = rec {
                 hello = nixpkgs.legacyPackages.x86_64-linux.hello;
                 test-vm = (vmTestv {distro=distro;}).driver;
                 test-vm-interactive = (vmTestv {distro=distro;}).driverInteractive;
+                test-vm-sandboxed = (vmTestv {distro=distro;}).sandboxed;
                 debian-test-vm = (vmTestv {distro="debian";}).driver;
                 debian-test-vm-interactive = (vmTestv {distro="debian";}).driverInteractive;
                 fedora-test-vm = (vmTestv {distro="fedora";}).driver;
                 fedora-test-vm-interactive = (vmTestv {distro="fedora";}).driverInteractive;
+                ubuntu-test-vm = (vmTestv {distro="ubuntu";}).driver;
+                ubuntu-test-vm-interactive = (vmTestv {distro="ubuntu";}).driverInteractive;
                 default = test-vm;
             };
 
