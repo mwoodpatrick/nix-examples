@@ -1,11 +1,13 @@
 # [Getting Started - nix-vm-test](https://github.com/numtide/nix-vm-test/blob/main/doc/getting-started.md)
+# [nix-vm-test](https://github.com/numtide/nix-vm-test)
 #
-# nix run
+# [nix run](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-run)
 # nix run .#hello
 # nix run .#test-vm
 # nix run .#test-vm-interactive
-# nix flake show
-# nix flake metadata
+# [nix flake check](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-check)
+# [nix flake show](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-show)
+# [nix flake metadata](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-metadata)
 {
   description = "A very basic flake";
 
