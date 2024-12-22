@@ -55,18 +55,9 @@
 
             vm.succeed('ls /mnt/host-shared')
 
-            # source the tests
-
-            vm.succeed('source /mnt/host-shared/tests.bash')
-
-            # install the packages
-
-            vm.succeed('install_packages')
-
             # run the tests
-            vm.succeed('run_tests')
 
-            vm.succeed("")
+            vm.succeed('/mnt/host-shared/tests.bash')
           '';
         };
 

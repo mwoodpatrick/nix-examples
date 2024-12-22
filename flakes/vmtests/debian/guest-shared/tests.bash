@@ -6,7 +6,7 @@ function check_command {
     cmd=$1
     pat=$2
 
-    # echo "checking for pattern $2"
+    echo "checking for pattern $2"
 
     $cmd > cmd_output.txt &&
     cat cmd_output.txt &&
@@ -21,6 +21,7 @@ function check_command {
 }
 
 function run_tests {
+    echo "in run_tests"
     local pat="Hello, world!"
     check_command hello "$pat"
 }
@@ -30,22 +31,29 @@ function install_packages_and_run_tests {
     case $DISTRO in
         ubuntu|debian)
             echo "Running commands for Debian-based systems (Ubuntu, Debian)..."
-            # apt update &&
+            apt update
+            echo "installing packages: $package"
             apt install -y $package
+            echo "after install status=$?"
+            apt-get -yq install $package
+            echo "after package check status = $?"
             # Add your Debian-based commands here
-            apt-get -yq install /mnt/host-shared/hello.deb
+            echo "running tests"
+            run_tests
             ;;
         fedora|centos|rhel)
             echo "Running commands for Red Hat-based systems (Fedora, CentOS, RHEL)..."
-            # dnf update -y
+            dnf update -y
             dnf install -y $package
             # Add your Red Hat-based commands here
+            run_tests
             ;;
         arch|manjaro)
             echo "Running commands for Arch-based systems (Arch, Manjaro)..."
-            # pacman -Syu
+            pacman -Syu
             pacman -S --noconfirm $package
             # Add your Arch-based commands here
+            run_tests
             ;;
         nixos )
             echo "Running commands for NixOS-based systems ..."
@@ -65,6 +73,7 @@ if [ -f /etc/os-release ]; then
     . /etc/os-release
     export DISTRO=$ID
     echo "Running tests on $DISTRO"
+    install_packages_and_run_tests
 else
     echo "Unsupported Linux distribution"
     exit 1
