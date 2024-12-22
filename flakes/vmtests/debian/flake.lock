@@ -7,13 +7,13 @@
       "locked": {
         "lastModified": 1734355073,
         "narHash": "sha256-FfdPOGy1zElTwKzjgIMp5K2D3gfPn6VWjVa4MJ9L1Tc=",
-        "owner": "numtide",
+        "owner": "mwoodpatrick",
         "repo": "nix-vm-test",
         "rev": "5948de39a616f2261dbbf4b6f25cbe1cbefd788c",
         "type": "github"
       },
       "original": {
-        "owner": "numtide",
+        "owner": "mwoodpatrick",
         "repo": "nix-vm-test",
         "type": "github"
       }

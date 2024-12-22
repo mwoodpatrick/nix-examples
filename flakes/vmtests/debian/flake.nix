@@ -1,7 +1,15 @@
 # [Getting Started - nix-vm-test](https://github.com/numtide/nix-vm-test/blob/main/doc/getting-started.md)
 # [nix-vm-test](https://github.com/numtide/nix-vm-test)
 #
+# nix build .#myhello 2>&1 | tee build.log
 # [nix build](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-build)
+#
+# nix log .#myhello |less
+# [nix log](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-log)
+#
+# nix derivation show .#myhello|less
+# [Our First Derivation](https://nixos.org/guides/nix-pills/06-our-first-derivation)
+# [nix derivation](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-derivation)
 # [nix run](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-run)
 # nix run .#hello
 # nix run .#test-vm
@@ -16,7 +24,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    nix-vm-test.url = "github:numtide/nix-vm-test";
+    nix-vm-test.url = "github:mwoodpatrick/nix-vm-test";
   };
 
   outputs = { self, nixpkgs, nix-vm-test }:
@@ -61,7 +69,7 @@
           '';
         };
 
-        vmTestv = { system?"x86_64-linux", distro?"debian", version?null, diskSize?"+1G", ... }@fattr :
+          vmTestv = { system?"x86_64-linux", distro?"debian", version?null, diskSize?"+1G", ... }@fattr :
             let 
                 _distro = if versions ? ${distro} then distro else throw "Unsupported distro: ${ distro }";
                 _version = if isNull version then builtins.elemAt versions.${_distro} 0 else
@@ -71,12 +79,39 @@
                     vmTest { system = system; distro = _distro; version = _version; } ;
                in var;
 
+            myHello = pkgs.stdenv.mkDerivation {
+                    pname = "myhello";
+                    version = "2.10";
+                  
+                    src = pkgs.fetchurl {
+                      url = "https://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz";
+                      sha256 = "sha256-MeBmE3qWJnbon2nRtlOC3pWn732RS4y5VvQepy4PUWs=";
+                    };
+                  
+                    buildInputs = [ pkgs.gcc ];
+                    buildPhase = ''
+                      mkdir -p $out/bin
+                      env > $out/build.env
+                      ls -Ral > $out/ls.log
+                      ./configure
+                      echo "*** doing make in $PWD ***"
+                      make
+                      ls -al
+                    '';
+                    installPhase = ''
+                      echo "*** In $PWD copying build products to $out ***"
+                      ls -Ral > $out/ls_install.log
+                      cp hello $out/bin
+                      cp -pr tests doc man hello.1 NEWS README* $out
+                    '';
+                  };
         in {
             # Run the sandboxed run with `nix flake check`
             checks.x86_64-linux.myTest = (vmTestv {distro=distro;}).sandboxed;
 
             packages.x86_64-linux = rec {
                 hello = nixpkgs.legacyPackages.x86_64-linux.hello;
+                myhello = myHello;
                 test-vm = (vmTestv {distro=distro;}).driver;
                 test-vm-interactive = (vmTestv {distro=distro;}).driverInteractive;
                 test-vm-sandboxed = (vmTestv {distro=distro;}).sandboxed;
