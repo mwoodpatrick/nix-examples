@@ -2,39 +2,26 @@
   "nodes": {
     "nix-vm-test": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
-        "lastModified": 1734355073,
-        "narHash": "sha256-FfdPOGy1zElTwKzjgIMp5K2D3gfPn6VWjVa4MJ9L1Tc=",
+        "lastModified": 1734964883,
+        "narHash": "sha256-02ZPydtuPJ7OCGXox1tJXxKY7nc2Dni6ukvkdO+/AlA=",
         "owner": "mwoodpatrick",
         "repo": "nix-vm-test",
-        "rev": "5948de39a616f2261dbbf4b6f25cbe1cbefd788c",
+        "rev": "7ab28725372bee62d8fb1d68010888fcd4ec7fcb",
         "type": "github"
       },
       "original": {
         "owner": "mwoodpatrick",
         "repo": "nix-vm-test",
+        "rev": "7ab28725372bee62d8fb1d68010888fcd4ec7fcb",
         "type": "github"
       }
     },
     "nixpkgs": {
-      "locked": {
-        "lastModified": 1708475490,
-        "narHash": "sha256-g1v0TsWBQPX97ziznfJdWhgMyMGtoBFs102xSYO4syU=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "0e74ca98a74bc7270d28838369593635a5db3260",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
       "locked": {
         "lastModified": 1734424634,
         "narHash": "sha256-cHar1vqHOOyC7f1+tVycPoWTfKIaqkoe1Q6TnKzuti4=",
@@ -53,7 +40,7 @@
     "root": {
       "inputs": {
         "nix-vm-test": "nix-vm-test",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

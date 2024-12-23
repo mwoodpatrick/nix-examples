@@ -24,7 +24,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    nix-vm-test.url = "github:mwoodpatrick/nix-vm-test";
+    nix-vm-test = {
+      url = "github:mwoodpatrick/nix-vm-test?rev=7ab28725372bee62d8fb1d68010888fcd4ec7fcb";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, nix-vm-test }:
@@ -37,7 +40,7 @@
         versions = {
             debian = ["13" "12"];
             ubuntu = ["23_10" "22_04"];
-            fedora = [ "40" "39" "38" ]; # ["41" "40" "39" ]
+            fedora = ["41" "40" "39" "38" ];
         };
         version = "13";
 
