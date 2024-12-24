@@ -5,15 +5,15 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
-        "owner": "numtide",
+        "lastModified": 1735071291,
+        "narHash": "sha256-5Pm2fqcPhqAmT0qj061KUAP9RyNHSfmZ2jYo2MU31SQ=",
+        "owner": "mwoodpatrick",
         "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "rev": "e18ae3659178e670a569d10915d05bc08fb3ef08",
         "type": "github"
       },
       "original": {
-        "owner": "numtide",
+        "owner": "mwoodpatrick",
         "repo": "flake-utils",
         "type": "github"
       }

@@ -31,7 +31,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-utils.url = "github:mwoodpatrick/flake-utils";
   };
 
   outputs = { self, nixpkgs, nix-vm-test, flake-utils }:
@@ -155,9 +155,10 @@
             };
 
             apps.x86_64-linux = rec {
-              # bash_hello = flake-utils.lib.mkApp { drv = self.packages.x86_64-linux.bash_hello; };
-              bash_hello = flake-utils.lib.mkApp { drv = self.packages.x86_64-linux.bash_hello; };
-# self.packages.x86_64-linux.bash_hello; };
+              bash_hello = flake-utils.lib.mkApp { 
+                  drv = self.packages.x86_64-linux.bash_hello; 
+                  description = "A simple bash based hello application";
+              };
               default = bash_hello;
             };
 
