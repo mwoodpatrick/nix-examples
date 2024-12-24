@@ -44,7 +44,7 @@
         versions = {
             debian = ["13" "12"];
             ubuntu = ["23_10" "22_04"];
-            fedora = ["41" "40" "39" "38" ];
+            fedora = ["41" "40" "39" ];
         };
         version = "13";
 
@@ -114,12 +114,18 @@
                   };
 
         in {
+            devShells.x86_64-linux = rec {
+                default = pkgs.mkShell {
+                    packages = [ pkgs.cowsay ];
+                };
+            };
+
             # Run the sandboxed run with `nix flake check`
             checks.x86_64-linux.myTest = (vmTestv {distro=distro;}).sandboxed;
 
             packages.x86_64-linux = rec {
                 bash_hello = pkgs.stdenv.mkDerivation rec {
-                  name = "hello_flake";
+                  name = "hello-flake";
       
                   src = ./.;
       
@@ -148,7 +154,7 @@
                 default = test-vm;
             };
 
-            apps = rec {
+            apps.x86_64-linux = rec {
               # bash_hello = flake-utils.lib.mkApp { drv = self.packages.x86_64-linux.bash_hello; };
               bash_hello = flake-utils.lib.mkApp { drv = self.packages.x86_64-linux.bash_hello; };
 # self.packages.x86_64-linux.bash_hello; };
@@ -163,4 +169,11 @@
             inherit versions vmTestv;
         
         };
+
+    nixConfig = { 
+        # bash-prompt-prefix = '''[$(hostname) $(pwd | awk -F/ '{print $(NF-1)"/"$NF}')]'''; 
+        # bash-prompt=" [\\u@\\h devshell]";
+        bash-prompt="\\[\\033[01;32m\\]\\u@\\h\\[\\033[00m\\]:$(basename $PWD):\\[\\033[01;34m\\][\\033[00m\\]dev $";
+        # bash-prompt-suffix = "dev: ";
+    };
 }
