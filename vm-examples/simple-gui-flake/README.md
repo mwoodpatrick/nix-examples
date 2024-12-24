@@ -12,7 +12,7 @@
 
 nixos-rebuild build-vm --flake .#my-first-gui-vm $ build the guest VM
 export QEMU_NET_OPTS="hostfwd=tcp::2221-:22" # enable port forwarding
-result/bin/run-my-nixos-system-vm # launch the VM
+./result/bin/run-my-first-nixos-gui-vm-vm # launch the VM
 
 ssh -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no admin@localhost -p 2221 # ssh into VM
 
