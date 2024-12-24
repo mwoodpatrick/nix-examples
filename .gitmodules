@@ -1,9 +1,0 @@
-[submodule "flakes/templates"]
-	path = flakes/templates
-	url = https://github.com/NixOS/templates
-[submodule "flakes/vmtests/flakes/vmtests/nix-vm-test-demo"]
-	path = flakes/vmtests/flakes/vmtests/nix-vm-test-demo
-	url = https://github.com/numtide/nix-vm-test-demo
-[submodule "flakes/vmtests/nix-vm-test-demo"]
-	path = flakes/vmtests/nix-vm-test-demo
-	url = https://github.com/numtide/nix-vm-test-demo
