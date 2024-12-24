@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+cowsay "Hello from your friendly bash flake!"

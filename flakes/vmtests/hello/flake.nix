@@ -1,3 +1,5 @@
+# [Wombat’s Book of Nix](https://mhwombat.codeberg.page/nix-book)
+# See https://github.com/mhwombat/nix-for-numbskulls/blob/main/flakes.md
 # [Getting Started - nix-vm-test](https://github.com/numtide/nix-vm-test/blob/main/doc/getting-started.md)
 # [nix-vm-test](https://github.com/numtide/nix-vm-test)
 #
@@ -18,7 +20,7 @@
 # [nix flake show](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-show)
 # [nix flake metadata](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-metadata)
 {
-  description = "A very basic flake";
+  description = "A template that shows all standard flake outputs";
 
   # Load the dependencies
 
@@ -28,9 +30,11 @@
       url = "github:mwoodpatrick/nix-vm-test?rev=7ab28725372bee62d8fb1d68010888fcd4ec7fcb";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, nix-vm-test }:
+  outputs = { self, nixpkgs, nix-vm-test, flake-utils }:
     # Create a test for Debian 13
       let
         system = "x86_64-linux";
@@ -108,11 +112,28 @@
                       cp -pr tests doc man hello.1 NEWS README* $out
                     '';
                   };
+
         in {
             # Run the sandboxed run with `nix flake check`
             checks.x86_64-linux.myTest = (vmTestv {distro=distro;}).sandboxed;
 
             packages.x86_64-linux = rec {
+                bash_hello = pkgs.stdenv.mkDerivation rec {
+                  name = "hello_flake";
+      
+                  src = ./.;
+      
+                  unpackPhase = "true";
+      
+                  buildPhase = ":";
+      
+                  installPhase =
+                    ''
+                      mkdir -p $out/bin
+                      cp $src/hello-flake $out/bin/hello-flake
+                      chmod +x $out/bin/hello-flake
+                    '';
+                };
                 hello = nixpkgs.legacyPackages.x86_64-linux.hello;
                 myhello = myHello;
                 test-vm = (vmTestv {distro=distro;}).driver;
@@ -127,8 +148,17 @@
                 default = test-vm;
             };
 
+            apps = rec {
+              # bash_hello = flake-utils.lib.mkApp { drv = self.packages.x86_64-linux.bash_hello; };
+              bash_hello = flake-utils.lib.mkApp { drv = self.packages.x86_64-linux.bash_hello; };
+# self.packages.x86_64-linux.bash_hello; };
+              default = bash_hello;
+            };
+
             debug = _: let var = builtins.trace "foo" "bar"; in var;
             test-vm = vmTestv {distro=distro;};
+
+            myself = self;
 
             inherit versions vmTestv;
         
