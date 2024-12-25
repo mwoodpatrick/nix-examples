@@ -154,6 +154,10 @@
                 default = test-vm;
             };
 
+            # An app is specified by a flake output attribute named apps.<system>.<name>
+            # The only supported attributes are: type (str), program (path), description (str)
+            # Use apps to expose packages that have multiple executables.
+            # https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-run#apps
             apps.x86_64-linux = rec {
               bash_hello = flake-utils.lib.mkApp { 
                   drv = self.packages.x86_64-linux.bash_hello; 
