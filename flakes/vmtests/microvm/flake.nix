@@ -1,3 +1,5 @@
+# QEMU MicroVM running NixOS 24.11 (Vicuna)
+# Start with: nix run
 {
   description = "NixOS in MicroVMs";
 

@@ -3,6 +3,7 @@ result-bin
 *.tar.gz
 *.qcow2 
 *.swp
+*.img
 .envrc
 .direnv
 
