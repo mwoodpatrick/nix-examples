@@ -1,7 +1,9 @@
-# Build this VM with: nixos-rebuild build-vm --flake .#my-microvm
+# Run NixOS 24.11 (Vicuna) in QEMU MicroVM
+# Start VM using nix run
+# Build this VM with: nix build and start with result/bin/microvm-run
 # Then rim it with: nix run .#my-microvm
 {
-  description = "NixOS in MicroVMs";
+  description = "NixOS 24.11 in MicroVMs";
 
   nixConfig = {
     extra-substituters = [ "https://microvm.cachix.org" ];
@@ -16,7 +18,9 @@
   outputs = { self, nixpkgs, microvm }:
     let
       system = "x86_64-linux";
-    in {
+    in
+    {
+      formatter.${system} = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
       packages.${system} = {
         default = self.packages.${system}.my-microvm;
         my-microvm = self.nixosConfigurations.my-microvm.config.microvm.declaredRunner;
@@ -31,48 +35,48 @@
               networking.hostName = "my-microvm";
 
 
-  # A default user able to use sudo
-  users.users = {
-    root.password = "";
-    guest = {
-      isNormalUser = true;
-      home = "/home/guest";
-      extraGroups = [ "wheel" ];
-      initialPassword = "westie";
-      # packages = [ inputs.home-manager.packages.${pkgs.system}.default ];
-      # packages = with pkgs; [
-      #   firefox
-      #   # thunderbird
-      #   ];
-      openssh.authorizedKeys.keys = [
-          # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
-        ];
-    };
+              # A default user able to use sudo
+              users.users = {
+                root.password = "";
+                guest = {
+                  isNormalUser = true;
+                  home = "/home/guest";
+                  extraGroups = [ "wheel" ];
+                  initialPassword = "westie";
+                  # packages = [ inputs.home-manager.packages.${pkgs.system}.default ];
+                  # packages = with pkgs; [
+                  #   firefox
+                  #   # thunderbird
+                  #   ];
+                  openssh.authorizedKeys.keys = [
+                    # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
+                  ];
+                };
 
-    alice = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" ];
-      initialPassword = "westie";
-    };
+                alice = {
+                  isNormalUser = true;
+                  extraGroups = [ "wheel" ];
+                  initialPassword = "westie";
+                };
 
-    admin = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" ];
-      initialPassword = "westie";
-    };
-  };
+                admin = {
+                  isNormalUser = true;
+                  extraGroups = [ "wheel" ];
+                  initialPassword = "westie";
+                };
+              };
 
-security.sudo.wheelNeedsPassword = false;
+              security.sudo.wheelNeedsPassword = false;
 
               # Set your time zone.
               time.timeZone = "America/Los_Angeles";
               microvm = {
-                volumes = [ {
+                volumes = [{
                   mountPoint = "/var";
                   image = "var.img";
                   size = 256;
-                } ];
-                shares = [ {
+                }];
+                shares = [{
                   # use proto = "virtiofs" for MicroVMs that are started by systemd
                   proto = "9p";
                   tag = "ro-store";
@@ -82,17 +86,15 @@ security.sudo.wheelNeedsPassword = false;
                   mountPoint = "/nix/.ro-store";
                 }
 
-                {
-                  # use proto = "virtiofs" for MicroVMs that are started by systemd
-                  proto = "9p";
-                  tag = "projects";
-                  # a host's /nix/store will be picked up so that no
-                  # squashfs/erofs will be built for it.
-                  source = "/mnt/wsl/projects";
-                  mountPoint = "/mnt/projects";
-                }
-
-                ];
+                  {
+                    # use proto = "virtiofs" for MicroVMs that are started by systemd
+                    proto = "9p";
+                    tag = "projects";
+                    # a host's /nix/store will be picked up so that no
+                    # squashfs/erofs will be built for it.
+                    source = "/mnt/wsl/projects";
+                    mountPoint = "/mnt/projects";
+                  }];
 
                 # "qemu" has 9p built-in!
                 hypervisor = "qemu";
