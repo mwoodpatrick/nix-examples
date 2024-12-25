@@ -1,3 +1,9 @@
 [submodule "flakes/flake-utils"]
 	path = flakes/flake-utils
 	url = https://github.com/mwoodpatrick/flake-utils.git
+[submodule "flakes/nixos-and-flakes-book"]
+	path = flakes/nixos-and-flakes-book
+	url = https://github.com/mwoodpatrick/nixos-and-flakes-book.git
+[submodule "flakes/nix-book"]
+	path = flakes/nix-book
+	url = https://github.com/mwoodpatrick/nix-book.git
