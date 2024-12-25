@@ -7,3 +7,6 @@
 [submodule "flakes/nix-book"]
 	path = flakes/nix-book
 	url = https://github.com/mwoodpatrick/nix-book.git
+[submodule "flakes/vmtests/astro-microvm"]
+	path = flakes/vmtests/astro-microvm
+	url = https://github.com/mwoodpatrick/microvm.nix.git
