@@ -1,0 +1,3 @@
+[submodule "flakes/flake-utils"]
+	path = flakes/flake-utils
+	url = https://github.com/mwoodpatrick/flake-utils.git
