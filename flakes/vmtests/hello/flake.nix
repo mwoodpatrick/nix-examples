@@ -13,14 +13,40 @@
 # [Our First Derivation](https://nixos.org/guides/nix-pills/06-our-first-derivation)
 # [nix derivation](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-derivation)
 # [nix run](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-run)
-# nix run .#hello
-# nix run .#test-vm
-# nix run .#test-vm-interactive
+
+# Run simple hello program
+#   nix run .#hello
+#   nix run .#bash_hello (uses cowsay)
+#
+# Run tests on VM (interactove version leaves VM running for debugging/additional testing)
+#   nix run .#test-vm
+#   nix run .#test-vm-interactive
+#   nix run .#debian-test-vm
+#   nix run .#debian-test-vm-interactive
+#   nix run .#fedora-test-vm
+#   nix run .#fedora-test-vm-interactive
+#   nix run .#ubuntu-test-vm
+#   nix run .#ubuntu-test-vm-interactive
+#
+# Run Micro VM's
+#   nix run .#my-microvm
+#
+# [microvm.nix](https://github.com/mwoodpatrick/microvm.nix)
 # [nix flake check](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-check)
 # [nix flake show](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-show)
 # [nix flake metadata](https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-flake-metadata)
 {
   description = "A template that shows all standard flake outputs";
+
+  nixConfig = {
+    # Currently using [starship](https://github.com/starship/starship) to define prompt
+    # bash-prompt-prefix = '''[$(hostname) $(pwd | awk -F/ '{print $(NF-1)"/"$NF}')]'''; 
+    # bash-prompt=" [\\u@\\h devshell]";
+    # bash-prompt = "\\[\\033[01;32m\\]\\u@\\h\\[\\033[00m\\]:$(basename $PWD):\\[\\033[01;34m\\][\\033[00m\\]dev $";
+    # bash-prompt-suffix = "dev: ";
+    extra-substituters = [ "https://microvm.cachix.org" ];
+    extra-trusted-public-keys = [ "microvm.cachix.org-1:oXnBc6hRE3eX5rSYdRyMYXnfzcCxC7yKPTbZXALsqys=" ];
+  };
 
   # Load the dependencies
 
@@ -32,153 +58,191 @@
     };
 
     flake-utils.url = "github:mwoodpatrick/flake-utils";
+
+    microvm = {
+        url = "github:astro/microvm.nix";
+        inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nix-vm-test, flake-utils }:
+  outputs = { self, nixpkgs, nix-vm-test, flake-utils, microvm }:
     # Create a test for Debian 13
-      let
-        system = "x86_64-linux";
-        pkgs = import nixpkgs { inherit system; };
-        lib = pkgs.lib;
-        distro = "debian";
-        versions = {
-            debian = ["13" "12"];
-            ubuntu = ["23_10" "22_04"];
-            fedora = ["41" "40" "39" ];
-        };
-        version = "13";
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { inherit system; };
+      lib = pkgs.lib;
+      distro = "debian";
+      versions = {
+        debian = [ "13" "12" ];
+        ubuntu = [ "23_10" "22_04" ];
+        fedora = [ "41" "40" "39" ];
+      };
+      version = "13";
 
-        vmTest = { system, distro, version  } : nix-vm-test.lib.${system}.${distro}.${version} {
+      vmTest = { system, distro, version }: nix-vm-test.lib.${system}.${distro}.${version} {
 
-          # This makes the guest-shared folder available in the test at /mnt/host-shared
+        # This makes the guest-shared folder available in the test at /mnt/host-shared
 
-          sharedDirs = {
-            debDir = {
-              source = "${./guest-shared}";
-              target = "/mnt/host-shared";
-            };
+        sharedDirs = {
+          debDir = {
+            source = "${./guest-shared}";
+            target = "/mnt/host-shared";
           };
-
-          # A synthetic test
-
-          testScript = ''
-            # Wait for the system to be fully booted
-
-            vm.wait_for_unit("multi-user.target")
-
-            # Test that the mount worked
-
-            vm.succeed('ls /mnt/host-shared')
-
-            # run the tests
-
-            vm.succeed('/mnt/host-shared/tests.bash')
-          '';
         };
 
-          vmTestv = { system?"x86_64-linux", distro?"debian", version?null, diskSize?"+1G", ... }@fattr :
-            let 
-                _distro = if versions ? ${distro} then distro else throw "Unsupported distro: ${ distro }";
-                _version = if isNull version then builtins.elemAt versions.${_distro} 0 else
-                    if builtins.elem version versions.${_distro} then version else 
-                        throw "Unsupported version ${version} for distro: ${ toString distro }";
-                var = builtins.trace "system=${system}; distro=${_distro} version=${_version}; " 
-                    vmTest { system = system; distro = _distro; version = _version; } ;
-               in var;
+        # A synthetic test
 
-            myHello = pkgs.stdenv.mkDerivation {
-                    pname = "myhello";
-                    version = "2.10";
-                  
-                    src = pkgs.fetchurl {
-                      url = "https://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz";
-                      sha256 = "sha256-MeBmE3qWJnbon2nRtlOC3pWn732RS4y5VvQepy4PUWs=";
-                    };
-                  
-                    buildInputs = [ pkgs.gcc ];
-                    buildPhase = ''
-                      mkdir -p $out/bin
-                      env > $out/build.env
-                      ls -Ral > $out/ls.log
-                      ./configure
-                      echo "*** doing make in $PWD ***"
-                      make
-                      ls -al
-                    '';
-                    installPhase = ''
-                      echo "*** In $PWD copying build products to $out ***"
-                      ls -Ral > $out/ls_install.log
-                      cp hello $out/bin
-                      cp -pr tests doc man hello.1 NEWS README* $out
-                    '';
-                  };
+        testScript = ''
+          # Wait for the system to be fully booted
 
-        in {
-            devShells.x86_64-linux = rec {
-                default = pkgs.mkShell {
-                    packages = [ pkgs.cowsay ];
-                };
-            };
+          vm.wait_for_unit("multi-user.target")
 
-            # Run the sandboxed run with `nix flake check`
-            checks.x86_64-linux.myTest = (vmTestv {distro=distro;}).sandboxed;
+          # Test that the mount worked
 
-            packages.x86_64-linux = rec {
-                bash_hello = pkgs.stdenv.mkDerivation rec {
-                  name = "hello-flake";
-      
-                  src = ./.;
-      
-                  unpackPhase = "true";
-      
-                  buildPhase = ":";
-      
-                  installPhase =
-                    ''
-                      mkdir -p $out/bin
-                      cp $src/hello-flake $out/bin/hello-flake
-                      chmod +x $out/bin/hello-flake
-                    '';
-                };
-                hello = nixpkgs.legacyPackages.x86_64-linux.hello;
-                myhello = myHello;
-                test-vm = (vmTestv {distro=distro;}).driver;
-                test-vm-interactive = (vmTestv {distro=distro;}).driverInteractive;
-                test-vm-sandboxed = (vmTestv {distro=distro;}).sandboxed;
-                debian-test-vm = (vmTestv {distro="debian";}).driver;
-                debian-test-vm-interactive = (vmTestv {distro="debian";}).driverInteractive;
-                fedora-test-vm = (vmTestv {distro="fedora";}).driver;
-                fedora-test-vm-interactive = (vmTestv {distro="fedora";}).driverInteractive;
-                ubuntu-test-vm = (vmTestv {distro="ubuntu";}).driver;
-                ubuntu-test-vm-interactive = (vmTestv {distro="ubuntu";}).driverInteractive;
-                default = test-vm;
-            };
+          vm.succeed('ls /mnt/host-shared')
 
-            # An app is specified by a flake output attribute named apps.<system>.<name>
-            # The only supported attributes are: type (str), program (path), description (str)
-            # Use apps to expose packages that have multiple executables.
-            # https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-run#apps
-            apps.x86_64-linux = rec {
-              bash_hello = flake-utils.lib.mkApp { 
-                  drv = self.packages.x86_64-linux.bash_hello; 
-                  description = "A simple bash based hello application";
+          # run the tests
+
+          vm.succeed('/mnt/host-shared/tests.bash')
+        '';
+      };
+
+      vmTestv = { system ? "x86_64-linux", distro ? "debian", version ? null, diskSize ? "+1G", ... }@fattr:
+        let
+          _distro = if versions ? ${distro} then distro else throw "Unsupported distro: ${ distro }";
+          _version = if isNull version then builtins.elemAt versions.${_distro} 0 else
+          if builtins.elem version versions.${_distro} then version else
+          throw "Unsupported version ${version} for distro: ${ toString distro }";
+          var = builtins.trace "system=${system}; distro=${_distro} version=${_version}; "
+            vmTest
+            { system = system; distro = _distro; version = _version; };
+        in
+        var;
+
+      myHello = pkgs.stdenv.mkDerivation {
+        pname = "myhello";
+        version = "2.10";
+
+        src = pkgs.fetchurl {
+          url = "https://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz";
+          sha256 = "sha256-MeBmE3qWJnbon2nRtlOC3pWn732RS4y5VvQepy4PUWs=";
+        };
+
+        buildInputs = [ pkgs.gcc ];
+        buildPhase = ''
+          mkdir -p $out/bin
+          env > $out/build.env
+          ls -Ral > $out/ls.log
+          ./configure
+          echo "*** doing make in $PWD ***"
+          make
+          ls -al
+        '';
+        installPhase = ''
+          echo "*** In $PWD copying build products to $out ***"
+          ls -Ral > $out/ls_install.log
+          cp hello $out/bin
+          cp -pr tests doc man hello.1 NEWS README* $out
+        '';
+      };
+
+    in
+    {
+      formatter.${system} = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
+
+      devShells.x86_64-linux = rec {
+        default = pkgs.mkShell {
+          packages = [ pkgs.cowsay ];
+        };
+      };
+
+      # Run the sandboxed run with `nix flake check`
+      checks.x86_64-linux.myTest = (vmTestv { distro = distro; }).sandboxed;
+
+      packages.x86_64-linux = rec {
+        bash_hello = pkgs.stdenv.mkDerivation rec {
+          name = "hello-flake";
+
+          src = ./.;
+
+          unpackPhase = "true";
+
+          buildPhase = ":";
+
+          installPhase =
+            ''
+              mkdir -p $out/bin
+              cp $src/hello-flake $out/bin/hello-flake
+              chmod +x $out/bin/hello-flake
+            '';
+        };
+        my-microvm = self.nixosConfigurations.my-microvm.config.microvm.declaredRunner;
+        hello = nixpkgs.legacyPackages.x86_64-linux.hello;
+        myhello = myHello;
+        test-vm = (vmTestv { distro = distro; }).driver;
+        test-vm-interactive = (vmTestv { distro = distro; }).driverInteractive;
+        test-vm-sandboxed = (vmTestv { distro = distro; }).sandboxed;
+        debian-test-vm = (vmTestv { distro = "debian"; }).driver;
+        debian-test-vm-interactive = (vmTestv { distro = "debian"; }).driverInteractive;
+        fedora-test-vm = (vmTestv { distro = "fedora"; }).driver;
+        fedora-test-vm-interactive = (vmTestv { distro = "fedora"; }).driverInteractive;
+        ubuntu-test-vm = (vmTestv { distro = "ubuntu"; }).driver;
+        ubuntu-test-vm-interactive = (vmTestv { distro = "ubuntu"; }).driverInteractive;
+        default = test-vm;
+      };
+
+      nixosConfigurations = {
+        my-microvm = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            microvm.nixosModules.microvm
+            {
+              networking.hostName = "my-microvm";
+              users.users.root.password = "";
+              microvm = {
+                volumes = [ {
+                  mountPoint = "/var";
+                  image = "var.img";
+                  size = 256;
+                } ];
+                shares = [ {
+                  # use proto = "virtiofs" for MicroVMs that are started by systemd
+                  proto = "9p";
+                  tag = "ro-store";
+                  # a host's /nix/store will be picked up so that no
+                  # squashfs/erofs will be built for it.
+                  source = "/nix/store";
+                  mountPoint = "/nix/.ro-store";
+                } ];
+
+                # "qemu" has 9p built-in!
+                hypervisor = "qemu";
+                socket = "control.socket";
               };
-              default = bash_hello;
-            };
-
-            debug = _: let var = builtins.trace "foo" "bar"; in var;
-            test-vm = vmTestv {distro=distro;};
-
-            myself = self;
-
-            inherit versions vmTestv;
-        
+            }
+          ];
         };
+       };
 
-    nixConfig = { 
-        # bash-prompt-prefix = '''[$(hostname) $(pwd | awk -F/ '{print $(NF-1)"/"$NF}')]'''; 
-        # bash-prompt=" [\\u@\\h devshell]";
-        bash-prompt="\\[\\033[01;32m\\]\\u@\\h\\[\\033[00m\\]:$(basename $PWD):\\[\\033[01;34m\\][\\033[00m\\]dev $";
-        # bash-prompt-suffix = "dev: ";
+      # An app is specified by a flake output attribute named apps.<system>.<name>
+      # The only supported attributes are: type (str), program (path), description (str)
+      # Use apps to expose packages that have multiple executables.
+      # https://nix.dev/manual/nix/2.25/command-ref/new-cli/nix3-run#apps
+      apps.x86_64-linux = rec {
+        bash_hello = flake-utils.lib.mkApp {
+          drv = self.packages.x86_64-linux.bash_hello;
+          description = "A simple bash based hello application";
+        };
+        default = bash_hello;
+      };
+
+      debug = _: let var = builtins.trace "foo" "bar"; in var;
+      test-vm = vmTestv { distro = distro; };
+
+      myself = self;
+
+      inherit versions vmTestv;
+
     };
+
 }
